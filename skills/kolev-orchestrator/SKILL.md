@@ -48,18 +48,11 @@ Read:
 - `AGENTS.md`
 - `docs/ARCHITECTURE.md`
 - `docs/STACK.md`
-- `docs/DEPLOYMENT.md` when environments, CI, database migration, hosting, storage or scheduled jobs are involved
+- `docs/IMPLEMENTATION-BLUEPRINT.md`
+- `docs/DEPLOYMENT.md`
+- `docs/INFRASTRUCTURE-LIVE.md`
 - `docs/SECURITY-AUTH.md` when auth, secrets, uploads, integrations or public/private boundaries are touched
 - only relevant domain sections from `docs/DATA-MODEL.md`
-
-### New implementation / project bootstrap / large feature planning
-Read:
-- `AGENTS.md`
-- `docs/STACK.md`
-- `docs/IMPLEMENTATION-BLUEPRINT.md`
-- only the feature-specific document(s) named above
-
-Do not scaffold later phases while implementing an earlier vertical slice unless a small interface is required to keep boundaries clean.
 
 ### Performance / context / agent tooling
 Read:
@@ -78,4 +71,5 @@ Before finishing any substantial task verify:
 - no generic-template regression
 - private customer/media boundaries remain intact
 - affected deterministic checks pass
+- production release is blocked until the Supabase admin-helper warning documented in `docs/INFRASTRUCTURE-LIVE.md` is resolved
 - report only changes, verification and unresolved risk
