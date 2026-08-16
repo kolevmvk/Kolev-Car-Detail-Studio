@@ -1,0 +1,65 @@
+name: Fetch cinematic story assets
+
+on:
+  push:
+    branches:
+      - feat/public-story
+    paths:
+      - '.github/workflows/fetch-cinematic-assets.yml'
+      - 'assets/cinematic-story/ASSET-MAP.md'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/public-story
+
+      - name: Download curated cinematic assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets/cinematic-story/images assets/cinematic-story/video
+
+          # Same grey Volkswagen Golf Mk7 series — Soran Ali / Pexels
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/20429096/pexels-photo-20429096.jpeg?auto=compress&cs=tinysrgb&w=2400' -o assets/cinematic-story/images/golf-road-hills.jpg
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/20759548/pexels-photo-20759548.jpeg?auto=compress&cs=tinysrgb&w=2400' -o assets/cinematic-story/images/golf-parking.jpg
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/20429094/pexels-photo-20429094.jpeg?auto=compress&cs=tinysrgb&w=2400' -o assets/cinematic-story/images/golf-seaside.jpg
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/20759547/pexels-photo-20759547.jpeg?auto=compress&cs=tinysrgb&w=2400' -o assets/cinematic-story/images/golf-mountain-road.jpg
+
+          # Time / recognition / craft details
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/18371956/pexels-photo-18371956.jpeg?auto=compress&cs=tinysrgb&w=1800' -o assets/cinematic-story/images/headlight-aged.jpg
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/6872149/pexels-photo-6872149.jpeg?auto=compress&cs=tinysrgb&w=1800' -o assets/cinematic-story/images/headlight-foam.jpg
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/5233285/pexels-photo-5233285.jpeg?auto=compress&cs=tinysrgb&w=1800' -o assets/cinematic-story/images/seat-deep-clean.jpg
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/6873185/pexels-photo-6873185.jpeg?auto=compress&cs=tinysrgb&w=1800' -o assets/cinematic-story/images/interior-hand-clean.jpg
+
+          # Process video — Pavel Danilyuk / Pexels
+          curl -L --fail --retry 3 'https://videos.pexels.com/video-files/6158073/6158073-hd_1920_1080_30fps.mp4' -o assets/cinematic-story/video/interior-detailing-1080p.mp4
+
+          find assets/cinematic-story -type f -printf '%p %k KB\n' | sort
+
+          too_big=$(find assets/cinematic-story/video -type f -size +95M -print)
+          if [ -n "$too_big" ]; then
+            echo "Video exceeds safe GitHub size limit:"
+            echo "$too_big"
+            exit 1
+          fi
+
+      - name: Commit fetched assets
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/cinematic-story/images assets/cinematic-story/video
+          if git diff --cached --quiet; then
+            echo 'No asset changes.'
+            exit 0
+          fi
+          git commit -m 'assets: add cinematic Golf story pack'
+          git push origin HEAD:feat/public-story
