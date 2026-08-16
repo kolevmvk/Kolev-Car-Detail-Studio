@@ -1,6 +1,10 @@
 import { media } from "@/features/story/content";
 import { StoryImage } from "./StoryImage";
 
+/**
+ * Press-and-hold comparison: wet extractor mid-use → clean interior result.
+ * Reduced-motion: shows both images side-by-side as static figures.
+ */
 export function HeadlightHold() {
   return (
     <div className="hold-root">
@@ -8,17 +12,21 @@ export function HeadlightHold() {
         type="button"
         className="hold-reveal"
         aria-describedby="hold-hint"
-        aria-label="Pritisni i drži da vidiš restaurirani far"
+        aria-label="Pritisni i drži da vidiš rezultat"
       >
         <span className="hold-reveal__frame">
+          <StoryImage
+            src={media.compareBefore}
+            alt="Ekstraktor na tkanini sedišta — rad u toku."
+            className="story-img"
+          />
+          <span className="hold-reveal__after" aria-hidden="true">
             <StoryImage
-              src={media.headlightOxidized}
+              src={media.compareAfter}
               alt=""
-              className="story-img crop-lamp"
+              className="story-img"
             />
-            <span className="hold-reveal__after" aria-hidden="true">
-              <StoryImage src={media.headlightClear} alt="" className="story-img crop-lamp" />
-            </span>
+          </span>
         </span>
         <span id="hold-hint" className="hold-reveal__hint">
           Pritisni i drži
@@ -29,22 +37,22 @@ export function HeadlightHold() {
         <figure className="hold-static__shot">
           <span className="hold-static__media">
             <StoryImage
-              src={media.headlightOxidized}
-              alt="Far pre rada: oksidisani, žuti polikarbonat."
-              className="story-img crop-lamp"
+              src={media.compareBefore}
+              alt="Ekstrakcija tkanine — rad koji je bio potreban."
+              className="story-img"
             />
           </span>
-          <figcaption>Pre</figcaption>
+          <figcaption>Rad</figcaption>
         </figure>
         <figure className="hold-static__shot">
           <span className="hold-static__media">
             <StoryImage
-              src={media.headlightClear}
-              alt="Far posle restauracije: optički čist polikarbonat."
-              className="story-img crop-lamp"
+              src={media.compareAfter}
+              alt="Čist enterijer posle rada — jasna tekstura, bez naslaga."
+              className="story-img"
             />
           </span>
-          <figcaption>Posle</figcaption>
+          <figcaption>Rezultat</figcaption>
         </figure>
       </div>
     </div>

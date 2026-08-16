@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "sr_RS",
     siteName: "Kolev Car Detailing",
-    images: ["/story/golf-restored.jpg"],
+    images: ["/story/polishing-garage.jpg"],
   },
   icons: {
     icon: "/icon.svg",

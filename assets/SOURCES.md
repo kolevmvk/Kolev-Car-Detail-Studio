@@ -29,3 +29,19 @@ All media in this directory is fetched from Pexels items marked **Free to use** 
 These are **source assets**, not final art direction. Prefer them as real photographic/video building blocks. The website should crop, grade, sequence and layer them according to `docs/VISUAL-DIRECTION.md`, `docs/STORY.md`, `docs/DESIGN-SYSTEM.md` and `docs/MOTION.md` rather than displaying them as a generic gallery.
 
 Do not imply that the people, workshops or vehicles shown are Kolev Car Detailing Studio, its staff, or actual customer jobs. They are stock imagery until replaced with authentic studio media.
+
+## Phase 1 media in use
+
+The current `public/story/` and `public/video/` directories serve these assets directly. Copies of the above files were placed there during bootstrap. The canonical source-of-truth remains this `assets/` directory.
+
+## Removed AI-generated images
+
+The following 1536×1024 AI-generated images were committed to `public/story/` in a prior pass and have been **removed** because they lack Pexels provenance and violate the truthfulness requirement of `AGENTS.md`:
+
+- `golf-new.jpg` / `golf-worn.jpg` / `golf-restored.jpg`
+- `headlight-clear.jpg` / `headlight-oxidized.jpg`
+- `seat-clean.jpg` / `seat-worn.jpg`
+- `beam-night.jpg`
+- `process-polish.jpg` / `process-extract.jpg`
+
+Do not re-add AI-generated imagery without explicit disclosure and owner approval. The story must use documented free-use stock media until authentic studio photography is available.
