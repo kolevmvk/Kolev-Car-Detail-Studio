@@ -17,15 +17,49 @@ All media in this directory is fetched from Pexels items marked **Free to use** 
 | `images/clean-interior.jpg` | clean premium leather interior | Ivan Kazlouski | https://www.pexels.com/photo/leather-interior-of-a-car-12190248/ |
 | `images/foam-front.jpg` | dramatic front-view foam wash | Bulat843 | https://www.pexels.com/photo/luxury-car-wash-with-black-car-front-view-29504458/ |
 
+## Cinematic story pack — protagonist and narrative inserts
+
+| File | Intended use | Creator | Source |
+|---|---|---|---|
+| `cinematic-story/images/golf-road-hills.jpg` | opening / memory / hero — grey Golf Mk7 | Soran Ali | https://www.pexels.com/photo/volkswagen-golf-car-parked-on-the-side-of-the-road-with-hills-20429096/ |
+| `cinematic-story/images/golf-parking.jpg` | neutral protagonist frame / years later | Soran Ali | https://www.pexels.com/photo/gray-volkswagen-golf-on-parking-lot-20759548/ |
+| `cinematic-story/images/golf-seaside.jpg` | emotional return / road again | Soran Ali | https://www.pexels.com/photo/silver-volkswagen-golf-mk7-on-the-road-by-the-sea-20429094/ |
+| `cinematic-story/images/golf-mountain-road.jpg` | closing / return to use | Soran Ali | https://www.pexels.com/photo/volkswagen-golf-on-road-near-mountain-20759547/ |
+| `cinematic-story/images/headlight-aged.jpg` | time / wear / recognition macro | Jonathan Borba | https://www.pexels.com/photo/headlight-of-a-car-18371956/ |
+| `cinematic-story/images/headlight-foam.jpg` | transition from recognition to craft | Tima Miroshnichenko | https://www.pexels.com/photo/a-close-up-shot-of-the-headlight-of-a-car-while-being-washed-6872149/ |
+| `cinematic-story/images/seat-deep-clean.jpg` | tactile interior extraction/process | Khunkorn Laowisit | https://www.pexels.com/photo/a-person-deep-cleaning-a-car-seat-5233285/ |
+| `cinematic-story/images/interior-hand-clean.jpg` | manual interior care / human detail | Tima Miroshnichenko | https://www.pexels.com/photo/a-man-in-black-jacket-cleaning-the-seat-of-a-car-6873185/ |
+
 ## Video
 
 | File | Subject | Creator | Source |
 |---|---|---|---|
 | `video/polishing-closeup-1080p.mp4` | close-up polishing in workshop | Pavel Danilyuk | https://www.pexels.com/video/polishing-a-car-6159183/ |
 | `video/foam-wash-vertical-1080p.mp4` | vertical foam application / wash | Matheus Bertelli | https://www.pexels.com/video/car-washing-foam-application-in-action-32010541/ |
+| `cinematic-story/video/interior-detailing-1080p.mp4` | close-up brush/glove interior detailing | Pavel Danilyuk | https://www.pexels.com/video/a-person-detailing-the-interior-of-the-car-6158073/ |
 
 ## Project use guidance
 
 These are **source assets**, not final art direction. Prefer them as real photographic/video building blocks. The website should crop, grade, sequence and layer them according to `docs/VISUAL-DIRECTION.md`, `docs/STORY.md`, `docs/DESIGN-SYSTEM.md` and `docs/MOTION.md` rather than displaying them as a generic gallery.
 
+The four Soran Ali Golf photographs are the preferred visual protagonist pack for Phase 1. They are intended to establish continuity of the same everyday-car archetype across the story. Do not claim they document a single real detailing job or that the apparent state changes are factual before/after evidence.
+
 Do not imply that the people, workshops or vehicles shown are Kolev Car Detailing Studio, its staff, or actual customer jobs. They are stock imagery until replaced with authentic studio media.
+
+See `assets/cinematic-story/ASSET-MAP.md` for scene-level usage guidance.
+
+## Phase 1 media in use
+
+The current `public/story/` and `public/video/` directories serve selected assets directly. The canonical source-of-truth remains this `assets/` directory. Claude may copy/optimize selected cinematic assets into `public/` as part of the Phase 1 implementation.
+
+## Removed AI-generated images
+
+The following 1536×1024 AI-generated images were committed to `public/story/` in a prior pass and have been **removed** because they lack Pexels provenance and violate the truthfulness requirement of `AGENTS.md`:
+
+- `golf-new.jpg` / `golf-worn.jpg` / `golf-restored.jpg`
+- `headlight-clear.jpg` / `headlight-oxidized.jpg`
+- `seat-clean.jpg` / `seat-worn.jpg`
+- `beam-night.jpg`
+- `process-polish.jpg` / `process-extract.jpg`
+
+Do not re-add AI-generated imagery without explicit disclosure and owner approval. The story must use documented free-use stock media until authentic studio photography is available.

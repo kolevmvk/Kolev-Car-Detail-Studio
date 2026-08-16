@@ -1,0 +1,600 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design tokens ──────────────────────────────────────────────── */
+
+:root {
+  --color-surface-0: #0d0d0d;
+  --color-surface-1: #161412;
+  --color-surface-light: #f3efe8;
+  --color-text-primary-dark: #ede8e0;
+  --color-text-primary-light: #141210;
+  --color-text-muted: #8a847a;
+  --color-line-subtle: #2a2723;
+  --color-accent: #c4913a;
+  --color-accent-dim: #7a5522;
+  --ease-reveal: cubic-bezier(0.22, 1, 0.36, 1);
+  --pad-x: clamp(1.15rem, 4vw, 3.5rem);
+}
+
+/* ─── Reset ──────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+body {
+  margin: 0;
+  background: var(--color-surface-0);
+  color: var(--color-text-primary-dark);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* ─── Accessibility ──────────────────────────────────────────────── */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--pad-x);
+  top: 0.75rem;
+  z-index: 60;
+  transform: translateY(-150%);
+  background: var(--color-surface-light);
+  color: var(--color-text-primary-light);
+  padding: 0.6rem 0.9rem;
+  font-size: 0.875rem;
+  pointer-events: auto;
+}
+
+.skip-link:focus { transform: none; }
+
+/* ─── Site chrome (minimal fixed overlay) ────────────────────────── */
+
+.site-chrome {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 40;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: calc(0.85rem + env(safe-area-inset-top)) var(--pad-x) 2.5rem;
+  pointer-events: none;
+}
+
+.site-chrome__mark,
+.site-chrome__place {
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #fff;
+  mix-blend-mode: difference;
+}
+
+/* ─── Image helpers ──────────────────────────────────────────────── */
+
+.story-img {
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Golf protagonist: consistent car alignment across dissolve */
+.crop-golf-time    { object-position: 50% 54%; }
+/* Opening S01: car slightly lower, sky above */
+.crop-golf-opening { object-position: 50% 60%; }
+/* Return S07: mirror of opening */
+.crop-golf-return  { object-position: 50% 56%; }
+
+.crop-entry-foam   { object-position: 50% 40%; }
+.crop-headlight    { object-position: 52% 44%; }
+.crop-seat         { object-position: 50% 45%; }
+
+/* ─── Film grain ─────────────────────────────────────────────────── */
+
+.grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+}
+
+/* ─── Typography ─────────────────────────────────────────────────── */
+
+.scene__label {
+  margin: 0 0 0.85rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.scene__headline {
+  margin: 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2.15rem, 9.5vw, 5.75rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.scene__headline--sm {
+  font-size: clamp(1.85rem, 7vw, 3.75rem);
+}
+
+.scene__note {
+  margin: 1.1rem 0 0;
+  max-width: 28ch;
+  font-size: clamp(1.05rem, 2.6vw, 1.3rem);
+  line-height: 1.45;
+  color: var(--color-text-muted);
+}
+
+.scene__meta {
+  margin: 2.25rem 0 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* ─── Base scene ─────────────────────────────────────────────────── */
+
+.scene {
+  position: relative;
+  min-height: 100dvh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-0);
+  overflow: hidden;
+}
+
+/* Full-bleed media behind all copy */
+.scene__media {
+  position: absolute;
+  inset: 0;
+}
+
+.scene__copy {
+  position: relative;
+  z-index: 2;
+}
+
+/* Copy at bottom with gradient scrim */
+.scene__copy--low {
+  margin-top: auto;
+  background: linear-gradient(transparent, rgb(13 13 13 / 0.9) 46%);
+  padding: 6rem var(--pad-x) calc(2.5rem + env(safe-area-inset-bottom));
+}
+
+/* Inline padding for label-only rows above interactive elements */
+.scene__copy--pad {
+  margin-bottom: 1.5rem;
+  padding: 0 var(--pad-x);
+}
+
+/* ─── S01 — NEKAD ────────────────────────────────────────────────── */
+
+/* Opening word is film-poster scale */
+.scene--memory .scene__headline {
+  font-size: clamp(3.5rem, 14vw, 8rem);
+}
+
+/* ─── S02 — VREME ────────────────────────────────────────────────── */
+
+/* Time scene manages height via its sticky child */
+.scene--time {
+  display: block;
+  min-height: unset;
+  overflow: visible;
+}
+
+.time__sticky {
+  position: relative;
+  min-height: 100dvh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.time__media {
+  position: absolute;
+  inset: 0;
+}
+
+/* Interior (parking/later) layer — hidden on mobile to avoid duplication
+   with the sequential mobile-beat below */
+.time__interior {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: none;
+}
+
+/* Copy at the bottom of the sticky frame */
+.time__copy {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  background: linear-gradient(transparent, rgb(13 13 13 / 0.9) 46%);
+  padding: 6rem var(--pad-x) calc(2.5rem + env(safe-area-inset-bottom));
+}
+
+/* Year markers: hidden on mobile, single documentary position on desktop */
+.time__year {
+  display: none;
+}
+
+/* Mobile: sequential second beat — same car, later moment */
+.time__mobile-beat {
+  position: relative;
+  min-height: 72dvh;
+  overflow: hidden;
+}
+
+.time__mobile-beat .time__media {
+  position: absolute;
+  inset: 0;
+}
+
+@media (min-width: 768px) {
+  .scene--time {
+    height: 250vh;
+  }
+
+  .time__sticky {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    display: grid;
+  }
+
+  .time__media,
+  .time__interior {
+    grid-area: 1 / 1;
+    min-height: 100dvh;
+  }
+
+  .time__interior {
+    display: block;
+  }
+
+  /* Aged visual treatment: the parking state feels later, slightly faded */
+  .time__interior .story-img {
+    filter: contrast(1.1) saturate(0.72) brightness(0.95);
+  }
+
+  /* Vignette strengthens the "enclosed/forgotten" feeling of the parked state */
+  .time__interior::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 46%,
+      transparent 32%,
+      rgb(13 13 13 / 0.22) 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .time__copy {
+    grid-area: 1 / 1;
+    align-self: end;
+    z-index: 3;
+    margin-top: 0;
+  }
+
+  /* Documentary year counter: single bottom-right position */
+  .time__year {
+    display: block;
+    position: absolute;
+    z-index: 4;
+    bottom: 5.5rem;
+    right: var(--pad-x);
+    font-family: var(--font-mono), monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    opacity: 0; /* controlled by Framer Motion */
+  }
+
+  .time__mobile-beat {
+    display: none;
+  }
+}
+
+/* ─── S03 — PREPOZNAVANJE ────────────────────────────────────────── */
+/* Film pause: off-white, 120dvh. Text sits at bottom of silence.    */
+/* The user scrolls through empty space before the line lands.        */
+
+.scene--recognition {
+  background: var(--color-surface-light);
+  color: var(--color-text-primary-light);
+  min-height: 120dvh;
+  min-height: 120svh;
+  justify-content: flex-end; /* text anchors to bottom of the silence */
+}
+
+.scene--recognition .scene__copy {
+  padding: 0 var(--pad-x) calc(5.5rem + env(safe-area-inset-bottom));
+}
+
+.scene--recognition .scene__headline {
+  /* Slightly smaller than S01/S04 — this is a whispered realisation */
+  font-size: clamp(1.95rem, 8.5vw, 5rem);
+}
+
+.scene--recognition .scene__note {
+  color: var(--color-accent-dim);
+}
+
+/* ─── S04 — ULAZ ─────────────────────────────────────────────────── */
+/* headlight-foam.jpg is portrait (1800×2700) — fills mobile naturally */
+
+/* ─── S05 — ZANAT — cinematic cut sequence ──────────────────────── */
+
+.scene--craft {
+  min-height: unset;
+  display: block;
+  overflow: visible;
+}
+
+/* Each cut is a full cinematic frame */
+.cut {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-surface-0);
+  /* No margin — cuts flow directly into each other */
+}
+
+.cut__media {
+  position: absolute;
+  inset: 0;
+}
+
+/* Minimal service annotation — bottom-left, atmosphere only */
+.cut__label {
+  position: absolute;
+  bottom: 1.75rem;
+  left: var(--pad-x);
+  z-index: 3;
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+/* Cut proportions — varying height creates editing rhythm */
+.cut--macro    { min-height: 100dvh; }    /* headlight: full viewport, slow read */
+.cut--pause    { min-height: 12dvh; }     /* black silence between macro and machine */
+.cut--video    { min-height: 96dvh; }     /* polishing video: nearly full */
+.cut--interior { min-height: 80dvh; }     /* seat fabric: shorter, hard cut feel */
+.cut--close    { min-height: 64dvh; }     /* interior video: intimate, smaller */
+.cut--copy     { min-height: 0; padding: 3.5rem var(--pad-x) 4.5rem; }
+
+/* ─── S06 — TRANSFORMACIJA ──────────────────────────────────────── */
+
+.scene--transformation {
+  min-height: unset;
+  padding-bottom: calc(3rem + env(safe-area-inset-bottom));
+}
+
+/* ─── Hold-to-reveal interaction ─────────────────────────────────── */
+
+.hold-root {
+  padding: 0 var(--pad-x);
+}
+
+.hold-reveal {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.hold-reveal__frame {
+  position: relative;
+  display: block;
+  min-height: 62dvh;
+}
+
+.hold-reveal__after {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.45s var(--ease-reveal);
+}
+
+.hold-reveal:active .hold-reveal__after,
+.hold-reveal:focus-visible .hold-reveal__after {
+  clip-path: inset(0 0 0 0);
+}
+
+.hold-reveal__hint {
+  display: block;
+  margin-top: 0.85rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.hold-static {
+  display: none;
+}
+
+.hold-static__shot {
+  margin: 0 0 1.25rem;
+}
+
+.hold-static__media {
+  position: relative;
+  display: block;
+  min-height: 42dvh;
+}
+
+.hold-static__shot figcaption {
+  margin: 0;
+  padding: 0.85rem var(--pad-x) 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* ─── Video component ────────────────────────────────────────────── */
+
+.story-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.story-video-poster {
+  display: none;
+}
+
+/* ─── S07 — POVRATAK ─────────────────────────────────────────────── */
+/* Rhymes with S01: same gradient, same label, same low-left copy.   */
+/* Opening asks. Return answers. Smaller type — more words, resolved. */
+
+.scene--return .scene__headline {
+  font-size: clamp(1.85rem, 7.5vw, 4.5rem);
+}
+
+/* ─── S08 — AKCIJA ───────────────────────────────────────────────── */
+/* Emotional continuation — not a conversion section. */
+
+.scene--action {
+  background: var(--color-surface-1);
+  justify-content: flex-end;
+}
+
+.scene--action .scene__copy {
+  padding: 0 var(--pad-x) calc(4.5rem + env(safe-area-inset-bottom));
+}
+
+.action__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  margin-top: 2.5rem;
+  padding: 0.9rem 1.5rem;
+  background: var(--color-accent);
+  color: #16110a;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  align-self: stretch;
+}
+
+.action__btn:hover {
+  background: #d4a24a;
+}
+
+@media (min-width: 768px) {
+  .scene--action .scene__copy {
+    max-width: 36rem;
+  }
+
+  .action__btn {
+    align-self: flex-start;
+  }
+}
+
+/* ─── Booking page ───────────────────────────────────────────────── */
+
+.booking-page {
+  min-height: 100dvh;
+  padding: calc(5.5rem + env(safe-area-inset-top)) var(--pad-x)
+    calc(3rem + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  max-width: 42rem;
+}
+
+.booking-page a {
+  color: var(--color-accent);
+}
+
+/* ─── Reduced motion ─────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-timeline: none !important;
+    animation-timeline: auto !important;
+  }
+
+  /* Show the later state immediately (no scroll-linked dissolve) */
+  .time__interior {
+    display: block;
+    opacity: 1 !important;
+  }
+
+  /* Hold-to-reveal → static side-by-side */
+  .hold-reveal { display: none; }
+  .hold-static { display: block; }
+
+  /* Videos → poster image */
+  .story-video       { display: none; }
+  .story-video-poster { display: block; }
+}
