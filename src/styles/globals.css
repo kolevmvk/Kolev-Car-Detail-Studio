@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Design tokens ──────────────────────────────────────────────── */
+
 :root {
   --color-surface-0: #0d0d0d;
   --color-surface-1: #161412;
@@ -15,6 +17,8 @@
   --ease-reveal: cubic-bezier(0.22, 1, 0.36, 1);
   --pad-x: clamp(1.15rem, 4vw, 3.5rem);
 }
+
+/* ─── Reset ──────────────────────────────────────────────────────── */
 
 *,
 *::before,
@@ -49,6 +53,8 @@ body {
   outline-offset: 3px;
 }
 
+/* ─── Accessibility ──────────────────────────────────────────────── */
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -78,6 +84,8 @@ body {
   transform: none;
 }
 
+/* ─── Site chrome (minimal, fixed overlay) ───────────────────────── */
+
 .site-chrome {
   position: fixed;
   inset: 0 0 auto;
@@ -100,26 +108,20 @@ body {
   mix-blend-mode: difference;
 }
 
+/* ─── Image utilities ────────────────────────────────────────────── */
+
 .story-img {
   object-fit: cover;
   object-position: center;
 }
 
-.crop-hero {
-  object-position: 58% 42%;
-}
+.crop-golf-opening { object-position: 50% 48%; }
+.crop-golf-parked  { object-position: 50% 50%; }
+.crop-golf-return  { object-position: 50% 40%; }
+.crop-entry-foam   { object-position: 50% 38%; }
+.crop-headlight    { object-position: 50% 52%; }
 
-.crop-lamp {
-  object-position: 78% 48%;
-}
-
-.crop-process-lamp {
-  object-position: 62% 48%;
-}
-
-.crop-extract {
-  object-position: 48% 58%;
-}
+/* ─── Film grain overlay ─────────────────────────────────────────── */
 
 .grain {
   position: absolute;
@@ -130,7 +132,9 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
 }
 
-.kicker {
+/* ─── Typography scale ───────────────────────────────────────────── */
+
+.scene__label {
   margin: 0 0 0.85rem;
   font-family: var(--font-mono), monospace;
   font-size: 0.68rem;
@@ -139,11 +143,7 @@ body {
   color: var(--color-accent);
 }
 
-.kicker--dark {
-  color: var(--color-accent-dim);
-}
-
-.display {
+.scene__headline {
   margin: 0;
   font-family: var(--font-display), Georgia, serif;
   font-weight: 400;
@@ -152,176 +152,165 @@ body {
   letter-spacing: -0.03em;
 }
 
-.display--sm {
+.scene__headline--sm {
   font-size: clamp(1.85rem, 7vw, 3.75rem);
 }
 
-.display--light {
-  color: var(--color-text-primary-light);
-}
-
-.lede {
-  margin: 1rem 0 0;
+.scene__note {
+  margin: 1.1rem 0 0;
   max-width: 28ch;
   font-size: clamp(1.05rem, 2.6vw, 1.3rem);
-  line-height: 1.4;
+  line-height: 1.45;
   color: var(--color-text-muted);
 }
 
-/* Letterbox frame: mobile-first cinematic unit */
-.frame {
+.scene__meta {
+  margin: 2rem 0 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* ─── Base scene unit ────────────────────────────────────────────── */
+
+.scene {
+  position: relative;
   min-height: 100dvh;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   background: var(--color-surface-0);
+  overflow: hidden;
 }
 
-.frame__media {
+/* Full-bleed media layer — sits behind all copy */
+.scene__media {
+  position: absolute;
+  inset: 0;
+}
+
+/* Copy positioning variants */
+
+.scene__copy {
   position: relative;
-  flex: 1 1 auto;
-  min-height: 62dvh;
+  z-index: 2;
 }
 
-.frame__caption {
-  padding: 1.35rem var(--pad-x) calc(1.5rem + env(safe-area-inset-bottom));
+/* Copy at bottom with gradient scrim */
+.scene__copy--low {
+  margin-top: auto;
+  background: linear-gradient(transparent, rgb(13 13 13 / 0.88) 44%);
+  padding: 6rem var(--pad-x) calc(2.25rem + env(safe-area-inset-bottom));
 }
 
-@media (min-width: 1024px) {
-  .frame {
-    display: grid;
-  }
-
-  .frame__media {
-    min-height: 100dvh;
-    grid-area: 1 / 1;
-  }
-
-  .frame__caption {
-    grid-area: 1 / 1;
-    align-self: end;
-    z-index: 2;
-    padding: 8rem var(--pad-x) 3.25rem;
-    background: linear-gradient(transparent, rgb(13 13 13 / 0.88) 42%);
-  }
-
-  .lede {
-    max-width: 36ch;
-  }
+/* Copy vertically centered (no image) */
+.scene__copy--text-only {
+  margin: auto 0;
+  padding: 4rem var(--pad-x);
 }
 
-/* Material evidence — overlapping crops, not a card grid */
-.material {
-  position: relative;
-  background: var(--color-surface-0);
-  padding: 0 0 clamp(3rem, 10vw, 7rem);
+/* Copy with just padding (used above an interactive element) */
+.scene__copy--pad {
+  margin-bottom: 1.5rem;
+  padding: 0 var(--pad-x);
 }
 
-.material__lead,
-.material__inset {
-  margin: 0;
+/* Copy at the bottom of a flex scene, no gradient */
+.scene__copy--bottom {
+  margin-top: auto;
+  padding: 2.5rem var(--pad-x) calc(2.5rem + env(safe-area-inset-bottom));
 }
 
-.material__media {
-  position: relative;
+/* ─── Scene 01 — Memory / NEKAD ──────────────────────────────────── */
+
+.scene--memory .scene__headline {
+  /* Extra large for single-word impact */
+  font-size: clamp(3.5rem, 14vw, 8rem);
+}
+
+/* ─── Scene 02 — Time / VREME ────────────────────────────────────── */
+
+/* Override: time scene manages its own height via sticky child */
+.scene--time {
   display: block;
-  min-height: 72dvh;
-}
-
-.material__media--inset {
-  min-height: 0;
-  aspect-ratio: 4 / 3;
-}
-
-.material__lead figcaption,
-.material__inset figcaption,
-.craft__lead figcaption,
-.craft__inset figcaption,
-.hold-static__shot figcaption {
-  margin: 0;
-  padding: 0.85rem var(--pad-x) 0;
-  font-family: var(--font-mono), monospace;
-  font-size: 0.68rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-}
-
-.material__inset {
-  margin-top: -12vw;
-  margin-left: auto;
-  width: min(78%, 22rem);
-  position: relative;
-  z-index: 1;
-}
-
-@media (min-width: 1024px) {
-  .material {
-    min-height: 100dvh;
-  }
-
-  .material__lead {
-    width: 68%;
-  }
-
-  .material__media {
-    min-height: 100dvh;
-  }
-
-  .material__inset {
-    position: absolute;
-    right: var(--pad-x);
-    bottom: 12vh;
-    width: min(34vw, 28rem);
-    margin: 0;
-  }
-
-  .material__media--inset {
-    min-height: 0;
-  }
-}
-
-/* Time: mobile = second frame. Desktop = sticky dissolve. */
-.time {
-  background: var(--color-surface-0);
+  min-height: unset;
+  overflow: visible; /* allow sticky child to escape */
 }
 
 .time__sticky {
   position: relative;
-}
-
-.time__media {
-  position: relative;
-  min-height: 62dvh;
+  min-height: 100dvh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
+.time__media {
+  position: absolute;
+  inset: 0;
+}
+
+.time__interior {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* Copy at bottom of the sticky frame */
 .time__copy {
-  padding: 1.35rem var(--pad-x) 1.75rem;
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  background: linear-gradient(transparent, rgb(13 13 13 / 0.88) 44%);
+  padding: 6rem var(--pad-x) calc(2.25rem + env(safe-area-inset-bottom));
 }
 
-.time__new {
-  display: block;
+/* Year markers: positioned at four corners of the time frame */
+.time__year {
+  position: absolute;
+  z-index: 3;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  opacity: 0; /* controlled by Framer Motion */
 }
 
-.time__worn,
-.time__worn-layer {
-  display: none;
-}
+.time__year--tl { top: calc(1.5rem + env(safe-area-inset-top)); left: var(--pad-x); }
+.time__year--tr { top: calc(1.5rem + env(safe-area-inset-top)); right: var(--pad-x); }
+.time__year--bl { bottom: 6rem; left: var(--pad-x); }
+.time__year--br { bottom: 6rem; right: var(--pad-x); }
 
-.time__years {
+/* Mobile: second beat — interior frame below the exterior one */
+.time__mobile-beat {
+  position: relative;
+  min-height: 72dvh;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.15rem;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-.time__mobile-next .frame__media {
-  min-height: 70dvh;
+.time__mobile-beat .time__media {
+  position: absolute;
+  inset: 0;
 }
 
+.time__mobile-beat .time__copy {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  background: linear-gradient(transparent, rgb(13 13 13 / 0.88) 44%);
+  padding: 4rem var(--pad-x) calc(2rem + env(safe-area-inset-bottom));
+}
+
+/* Desktop: sticky pinned dissolve */
 @media (min-width: 768px) {
-  .time {
-    height: 240vh;
+  .scene--time {
+    height: 250vh;
   }
 
   .time__sticky {
@@ -336,179 +325,130 @@ body {
     min-height: 100dvh;
   }
 
-  .time__new {
-    display: block;
-  }
-
-  .time__worn-layer {
-    display: block;
-    position: absolute;
-    inset: 0;
-    z-index: 1;
+  .time__interior {
+    grid-area: 1 / 1;
+    min-height: 100dvh;
   }
 
   .time__copy {
     grid-area: 1 / 1;
     align-self: end;
     z-index: 2;
-    padding: 8rem var(--pad-x) 3.25rem;
-    background: linear-gradient(transparent, rgb(13 13 13 / 0.88) 42%);
+    margin-top: 0;
   }
 
-  .time__mobile-next {
+  .time__mobile-beat {
     display: none;
   }
 }
 
-.recognition {
-  min-height: 100dvh;
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 6rem var(--pad-x) calc(4rem + env(safe-area-inset-bottom));
+/* ─── Scene 03 — Recognition / PREPOZNAVANJE ─────────────────────── */
+
+.scene--recognition {
   background: var(--color-surface-light);
   color: var(--color-text-primary-light);
 }
 
-.recognition__line {
-  margin: 2.5rem 0 0;
-  max-width: 24ch;
-  font-size: clamp(1.05rem, 2.4vw, 1.35rem);
-  line-height: 1.4;
+.scene--recognition .scene__note {
+  color: var(--color-accent-dim);
 }
 
-.sticky-cta {
-  position: sticky;
-  top: calc(100svh - 4.65rem - env(safe-area-inset-bottom, 0px));
-  z-index: 25;
-  display: flex;
-  justify-content: stretch;
-  padding: 0.75rem var(--pad-x) calc(0.75rem + env(safe-area-inset-bottom));
-  background: linear-gradient(transparent, rgb(13 13 13 / 0.92));
-  pointer-events: none;
-}
+/* ─── Scene 04 — Entry / ULAZ ────────────────────────────────────── */
 
-.sticky-cta__btn,
-.close__btn {
-  pointer-events: auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 3rem;
-  width: 100%;
-  padding: 0.85rem 1.15rem;
-  background: var(--color-accent);
-  color: #16110a;
-  text-decoration: none;
-  font-size: 0.92rem;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-}
+/* Entry inherits base scene — dark, close, workshop warmth in the image */
 
-.sticky-cta__btn:hover,
-.close__btn:hover {
-  background: #d4a24a;
-}
+/* ─── Scene 05 — Craft / ZANAT — cinematic cuts ──────────────────── */
 
-.craft {
-  position: relative;
-  padding: 4rem 0 clamp(4rem, 10vw, 8rem);
-  border-top: 1px solid var(--color-line-subtle);
-}
-
-.craft__head {
-  padding: 0 var(--pad-x) 2.5rem;
-}
-
-.craft__lead,
-.craft__inset {
-  margin: 0;
-}
-
-.craft__media {
-  position: relative;
+.scene--craft {
+  min-height: unset;
   display: block;
-  min-height: 62dvh;
+  overflow: visible;
+}
+
+/* Each cut is a cinematic frame in the sequence */
+.cut {
+  position: relative;
+  min-height: 88dvh;
   overflow: hidden;
+  background: var(--color-surface-0);
 }
 
-.craft__media--inset {
-  min-height: 0;
-  aspect-ratio: 4 / 5;
+.cut__media {
+  position: absolute;
+  inset: 0;
 }
 
-.craft__index {
-  display: block;
-  padding: 0 var(--pad-x) 0.65rem;
+/* Minimal service label — bottom-left, accent mono */
+.cut__label {
+  position: absolute;
+  bottom: 1.75rem;
+  left: var(--pad-x);
+  z-index: 3;
+  margin: 0;
   font-family: var(--font-mono), monospace;
-  font-size: 0.68rem;
-  letter-spacing: 0.18em;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
   color: var(--color-accent);
 }
 
-.craft__lead figcaption,
-.craft__inset figcaption {
-  max-width: 42ch;
+/* Video cut: autoplay loop fills the frame */
+.cut--video {
+  min-height: 80dvh;
 }
 
-.craft__lead figcaption span,
-.craft__inset figcaption span {
-  display: block;
-  margin-bottom: 0.35rem;
-  color: var(--color-text-primary-dark);
+/* Accent cut: slightly narrower on desktop for visual rhythm */
+.cut--accent {
+  min-height: 76dvh;
 }
 
-.craft__inset {
-  margin-top: -10vw;
-  margin-left: auto;
-  width: min(82%, 24rem);
-  position: relative;
-  z-index: 1;
+/* Foam cut: shorter beat */
+.cut--foam {
+  min-height: 52dvh;
 }
 
-.story-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.story-video-poster,
-.craft__media--video .story-img {
-  z-index: 0;
-}
-
-.story-video-poster {
-  display: none;
+/* Copy-only cut: no media, pure typography */
+.cut--copy {
+  min-height: 0;
+  padding: 4rem var(--pad-x) 4.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 @media (min-width: 1024px) {
-  .craft__lead {
-    width: 70%;
+  .cut {
+    min-height: 100dvh;
   }
 
-  .craft__media--video {
-    min-height: 88dvh;
+  .cut--video {
+    min-height: 100dvh;
   }
 
-  .craft__inset {
-    position: absolute;
-    right: var(--pad-x);
-    bottom: 6vh;
-    width: min(32vw, 26rem);
-    margin: 0;
+  .cut--accent {
+    min-height: 80dvh;
+    width: 72%;
+  }
+
+  .cut--foam {
+    min-height: 60dvh;
+    width: 48%;
+    margin-left: auto;
+  }
+
+  .cut--copy {
+    padding: 5rem var(--pad-x) 5.5rem;
   }
 }
 
-.compare {
-  padding: 2rem 0 4rem;
+/* ─── Scene 06 — Transformation / TRANSFORMACIJA ─────────────────── */
+
+.scene--transformation {
+  min-height: unset;
+  padding-bottom: calc(3rem + env(safe-area-inset-bottom));
 }
 
-.compare__copy {
-  padding: 0 var(--pad-x) 1.5rem;
-}
+/* ─── Hold-to-reveal interaction ─────────────────────────────────── */
 
 .hold-root {
   padding: 0 var(--pad-x);
@@ -556,6 +496,7 @@ body {
   color: var(--color-accent);
 }
 
+/* Reduced-motion fallback: static side-by-side */
 .hold-static {
   display: none;
 }
@@ -570,60 +511,81 @@ body {
   min-height: 42dvh;
 }
 
-.frame--beam .beam-glow {
+.hold-static__shot figcaption {
+  margin: 0;
+  padding: 0.85rem var(--pad-x) 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* ─── Video component ────────────────────────────────────────────── */
+
+.story-video {
   position: absolute;
   inset: 0;
-  pointer-events: none;
-  background: radial-gradient(ellipse 50% 40% at 72% 58%, rgb(196 145 58 / 0.22), transparent 70%);
-  animation: illuminate 2.8s var(--ease-reveal) both;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-@keyframes illuminate {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.story-video-poster,
+.cut__media .story-img {
+  z-index: 0;
 }
 
-.close {
-  min-height: 80dvh;
-  display: flex;
-  flex-direction: column;
+.story-video-poster {
+  display: none;
+}
+
+/* ─── Scene 07 — Return / POVRATAK ──────────────────────────────── */
+
+/* Return inherits base scene — rhymes with opening */
+
+/* ─── Scene 08 — Action / AKCIJA ─────────────────────────────────── */
+
+.scene--action {
   justify-content: flex-end;
-  padding: 5rem var(--pad-x) calc(3rem + env(safe-area-inset-bottom));
+  background: var(--color-surface-1);
 }
 
-.close__note {
-  max-width: 34ch;
+.scene--action .scene__copy {
+  padding: 4rem var(--pad-x) calc(4rem + env(safe-area-inset-bottom));
 }
 
-.close__btn {
+.action__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  margin-top: 2.5rem;
+  padding: 0.9rem 1.5rem;
+  background: var(--color-accent);
+  color: #16110a;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
   align-self: stretch;
-  margin-top: 2rem;
+}
+
+.action__btn:hover {
+  background: #d4a24a;
 }
 
 @media (min-width: 768px) {
-  .sticky-cta {
-    justify-content: flex-end;
+  .scene--action .scene__copy {
+    max-width: 38rem;
   }
 
-  .sticky-cta__btn,
-  .close__btn {
-    width: auto;
+  .action__btn {
     align-self: flex-start;
   }
 }
 
-.close__meta {
-  margin: 2rem 0 0;
-  font-family: var(--font-mono), monospace;
-  font-size: 0.68rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-}
+/* ─── Booking page ───────────────────────────────────────────────── */
 
 .booking-page {
   min-height: 100dvh;
@@ -639,6 +601,8 @@ body {
   color: var(--color-accent);
 }
 
+/* ─── Reduced motion ────────────────────────────────────────────── */
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -650,11 +614,12 @@ body {
     animation-timeline: auto !important;
   }
 
-  .time__worn,
-  .time__worn-layer {
-    opacity: 1;
+  /* Time scene: show the interior frame statically */
+  .time__interior {
+    opacity: 1 !important;
   }
 
+  /* Hold-to-reveal: show static side-by-side */
   .hold-reveal {
     display: none;
   }
@@ -663,6 +628,7 @@ body {
     display: block;
   }
 
+  /* Video: show poster image instead */
   .story-video {
     display: none;
   }
