@@ -90,26 +90,30 @@ COMMENT ON COLUMN public.services.cleanup_buffer_minutes IS
 
 ALTER TABLE public.services ENABLE ROW LEVEL SECURITY;
 
--- Anyone can read active services (public booking UI needs this).
+DROP POLICY IF EXISTS "public_select_active_services" ON public.services;
+DROP POLICY IF EXISTS "public_read_active_services" ON public.services;
+DROP POLICY IF EXISTS "admins_select_all_services" ON public.services;
+DROP POLICY IF EXISTS "admin_all_services" ON public.services;
+DROP POLICY IF EXISTS "admins_modify_services" ON public.services;
+
 CREATE POLICY "public_select_active_services"
   ON public.services
   FOR SELECT
+  TO anon, authenticated
   USING (active = true);
 
--- Admins can read all services (including inactive).
 CREATE POLICY "admins_select_all_services"
   ON public.services
   FOR SELECT
   TO authenticated
-  USING (public.is_admin());
+  USING (private.is_admin());
 
--- Only admins can write services.
 CREATE POLICY "admins_modify_services"
   ON public.services
   FOR ALL
   TO authenticated
-  USING (public.is_admin())
-  WITH CHECK (public.is_admin());
+  USING (private.is_admin())
+  WITH CHECK (private.is_admin());
 
 -- ─── customers ─────────────────────────────────────────────────────────────
 
@@ -128,7 +132,11 @@ COMMENT ON TABLE public.customers IS
 
 ALTER TABLE public.customers ENABLE ROW LEVEL SECURITY;
 
--- Public visitors can INSERT a customer row (creating their own booking).
+DROP POLICY IF EXISTS "anon_insert_customers" ON public.customers;
+DROP POLICY IF EXISTS "admins_select_customers" ON public.customers;
+DROP POLICY IF EXISTS "admin_all_customers" ON public.customers;
+DROP POLICY IF EXISTS "admins_modify_customers" ON public.customers;
+
 CREATE POLICY "anon_insert_customers"
   ON public.customers
   FOR INSERT
@@ -140,14 +148,14 @@ CREATE POLICY "admins_select_customers"
   ON public.customers
   FOR SELECT
   TO authenticated
-  USING (public.is_admin());
+  USING (private.is_admin());
 
 CREATE POLICY "admins_modify_customers"
   ON public.customers
   FOR ALL
   TO authenticated
-  USING (public.is_admin())
-  WITH CHECK (public.is_admin());
+  USING (private.is_admin())
+  WITH CHECK (private.is_admin());
 
 -- ─── vehicles ──────────────────────────────────────────────────────────────
 
@@ -162,10 +170,34 @@ CREATE TABLE IF NOT EXISTS public.vehicles (
   created_at      timestamptz NOT NULL DEFAULT now()
 );
 
+ALTER TABLE public.vehicles
+  ADD COLUMN IF NOT EXISTS customer_id uuid;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conname = 'vehicles_customer_id_fkey'
+      AND conrelid = 'public.vehicles'::regclass
+  ) THEN
+    ALTER TABLE public.vehicles
+      ADD CONSTRAINT vehicles_customer_id_fkey
+      FOREIGN KEY (customer_id)
+      REFERENCES public.customers (id)
+      ON DELETE SET NULL;
+  END IF;
+END $$;
+
 COMMENT ON TABLE public.vehicles IS
   'Customer vehicle records. registration is private — never exposed publicly.';
 
 ALTER TABLE public.vehicles ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "anon_insert_vehicles" ON public.vehicles;
+DROP POLICY IF EXISTS "admins_select_vehicles" ON public.vehicles;
+DROP POLICY IF EXISTS "admin_all_vehicles" ON public.vehicles;
+DROP POLICY IF EXISTS "admins_modify_vehicles" ON public.vehicles;
 
 CREATE POLICY "anon_insert_vehicles"
   ON public.vehicles
@@ -177,14 +209,14 @@ CREATE POLICY "admins_select_vehicles"
   ON public.vehicles
   FOR SELECT
   TO authenticated
-  USING (public.is_admin());
+  USING (private.is_admin());
 
 CREATE POLICY "admins_modify_vehicles"
   ON public.vehicles
   FOR ALL
   TO authenticated
-  USING (public.is_admin())
-  WITH CHECK (public.is_admin());
+  USING (private.is_admin())
+  WITH CHECK (private.is_admin());
 
 -- ─── availability_windows ──────────────────────────────────────────────────
 
@@ -209,25 +241,29 @@ COMMENT ON TABLE public.availability_windows IS
 
 ALTER TABLE public.availability_windows ENABLE ROW LEVEL SECURITY;
 
--- Public can read enabled windows (needed for slot generation on server side —
--- the server action runs as service_role, but the typed query still needs a policy).
+DROP POLICY IF EXISTS "public_select_enabled_windows" ON public.availability_windows;
+DROP POLICY IF EXISTS "admins_select_all_windows" ON public.availability_windows;
+DROP POLICY IF EXISTS "admin_all_availability_windows" ON public.availability_windows;
+DROP POLICY IF EXISTS "admins_modify_windows" ON public.availability_windows;
+
 CREATE POLICY "public_select_enabled_windows"
   ON public.availability_windows
   FOR SELECT
+  TO anon, authenticated
   USING (enabled = true);
 
 CREATE POLICY "admins_select_all_windows"
   ON public.availability_windows
   FOR SELECT
   TO authenticated
-  USING (public.is_admin());
+  USING (private.is_admin());
 
 CREATE POLICY "admins_modify_windows"
   ON public.availability_windows
   FOR ALL
   TO authenticated
-  USING (public.is_admin())
-  WITH CHECK (public.is_admin());
+  USING (private.is_admin())
+  WITH CHECK (private.is_admin());
 
 -- ─── availability_blocks ───────────────────────────────────────────────────
 
@@ -246,20 +282,29 @@ COMMENT ON TABLE public.availability_blocks IS
 
 ALTER TABLE public.availability_blocks ENABLE ROW LEVEL SECURITY;
 
--- Public can read blocks (needed for server-side slot generation).
--- The reason and note fields are intentionally omitted from public API responses
--- so callers only learn that time is unavailable, not why.
+DROP POLICY IF EXISTS "public_select_blocks" ON public.availability_blocks;
+DROP POLICY IF EXISTS "admins_select_blocks" ON public.availability_blocks;
+DROP POLICY IF EXISTS "admin_all_availability_blocks" ON public.availability_blocks;
+DROP POLICY IF EXISTS "admins_modify_blocks" ON public.availability_blocks;
+
 CREATE POLICY "public_select_blocks"
   ON public.availability_blocks
   FOR SELECT
+  TO anon, authenticated
   USING (true);
+
+CREATE POLICY "admins_select_blocks"
+  ON public.availability_blocks
+  FOR SELECT
+  TO authenticated
+  USING (private.is_admin());
 
 CREATE POLICY "admins_modify_blocks"
   ON public.availability_blocks
   FOR ALL
   TO authenticated
-  USING (public.is_admin())
-  WITH CHECK (public.is_admin());
+  USING (private.is_admin())
+  WITH CHECK (private.is_admin());
 
 -- ─── bookings ──────────────────────────────────────────────────────────────
 
@@ -290,7 +335,11 @@ COMMENT ON TABLE public.bookings IS
 
 ALTER TABLE public.bookings ENABLE ROW LEVEL SECURITY;
 
--- Public visitors can INSERT bookings (anonymous booking flow).
+DROP POLICY IF EXISTS "anon_insert_bookings" ON public.bookings;
+DROP POLICY IF EXISTS "admins_select_bookings" ON public.bookings;
+DROP POLICY IF EXISTS "admin_all_bookings" ON public.bookings;
+DROP POLICY IF EXISTS "admins_modify_bookings" ON public.bookings;
+
 CREATE POLICY "anon_insert_bookings"
   ON public.bookings
   FOR INSERT
@@ -302,14 +351,14 @@ CREATE POLICY "admins_select_bookings"
   ON public.bookings
   FOR SELECT
   TO authenticated
-  USING (public.is_admin());
+  USING (private.is_admin());
 
 CREATE POLICY "admins_modify_bookings"
   ON public.bookings
   FOR UPDATE
   TO authenticated
-  USING (public.is_admin())
-  WITH CHECK (public.is_admin());
+  USING (private.is_admin())
+  WITH CHECK (private.is_admin());
 
 -- ─── jobs ──────────────────────────────────────────────────────────────────
 
@@ -333,12 +382,15 @@ COMMENT ON TABLE public.jobs IS
 
 ALTER TABLE public.jobs ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "admins_manage_jobs" ON public.jobs;
+DROP POLICY IF EXISTS "admin_all_jobs" ON public.jobs;
+
 CREATE POLICY "admins_manage_jobs"
   ON public.jobs
   FOR ALL
   TO authenticated
-  USING (public.is_admin())
-  WITH CHECK (public.is_admin());
+  USING (private.is_admin())
+  WITH CHECK (private.is_admin());
 
 -- ─── job_services ──────────────────────────────────────────────────────────
 
@@ -353,12 +405,15 @@ CREATE TABLE IF NOT EXISTS public.job_services (
 
 ALTER TABLE public.job_services ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "admins_manage_job_services" ON public.job_services;
+DROP POLICY IF EXISTS "admin_all_job_services" ON public.job_services;
+
 CREATE POLICY "admins_manage_job_services"
   ON public.job_services
   FOR ALL
   TO authenticated
-  USING (public.is_admin())
-  WITH CHECK (public.is_admin());
+  USING (private.is_admin())
+  WITH CHECK (private.is_admin());
 
 -- ─── waitlist_entries ──────────────────────────────────────────────────────
 
@@ -377,6 +432,9 @@ COMMENT ON TABLE public.waitlist_entries IS
 
 ALTER TABLE public.waitlist_entries ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "anon_insert_waitlist" ON public.waitlist_entries;
+DROP POLICY IF EXISTS "admins_manage_waitlist" ON public.waitlist_entries;
+
 CREATE POLICY "anon_insert_waitlist"
   ON public.waitlist_entries
   FOR INSERT
@@ -387,8 +445,8 @@ CREATE POLICY "admins_manage_waitlist"
   ON public.waitlist_entries
   FOR ALL
   TO authenticated
-  USING (public.is_admin())
-  WITH CHECK (public.is_admin());
+  USING (private.is_admin())
+  WITH CHECK (private.is_admin());
 
 -- ─── Indexes ───────────────────────────────────────────────────────────────
 
@@ -406,3 +464,73 @@ CREATE INDEX IF NOT EXISTS idx_windows_enabled_range
 
 CREATE INDEX IF NOT EXISTS idx_blocks_range
   ON public.availability_blocks (starts_at, ends_at);
+
+-- ─── Grants ────────────────────────────────────────────────────────────────
+
+-- Supabase defaults can leave broad table privileges in place. Revoke them
+-- explicitly so RLS policies are paired with the smallest table-level grants
+-- needed for the public booking flow and Studio OS.
+REVOKE ALL ON TABLE
+  public.admin_profiles,
+  public.services,
+  public.customers,
+  public.vehicles,
+  public.availability_windows,
+  public.availability_blocks,
+  public.bookings,
+  public.jobs,
+  public.job_services,
+  public.waitlist_entries
+FROM anon, authenticated;
+
+GRANT SELECT ON TABLE
+  public.services,
+  public.availability_windows,
+  public.availability_blocks
+TO anon;
+
+GRANT INSERT ON TABLE
+  public.customers,
+  public.vehicles,
+  public.bookings,
+  public.waitlist_entries
+TO anon;
+
+GRANT SELECT ON TABLE
+  public.admin_profiles,
+  public.services,
+  public.customers,
+  public.vehicles,
+  public.availability_windows,
+  public.availability_blocks,
+  public.bookings,
+  public.jobs,
+  public.job_services,
+  public.waitlist_entries
+TO authenticated;
+
+GRANT INSERT ON TABLE
+  public.admin_profiles,
+  public.services,
+  public.customers,
+  public.vehicles,
+  public.availability_windows,
+  public.availability_blocks,
+  public.bookings,
+  public.jobs,
+  public.job_services,
+  public.waitlist_entries
+TO authenticated;
+
+GRANT UPDATE, DELETE ON TABLE
+  public.admin_profiles,
+  public.services,
+  public.customers,
+  public.vehicles,
+  public.availability_windows,
+  public.availability_blocks,
+  public.bookings,
+  public.jobs,
+  public.job_services,
+  public.waitlist_entries
+TO authenticated;

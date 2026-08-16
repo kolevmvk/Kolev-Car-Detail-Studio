@@ -24,7 +24,7 @@
 -- bookings without a gap when buffers are non-zero.
 
 ALTER TABLE public.bookings
-  ADD COLUMN time_range tstzrange
+  ADD COLUMN IF NOT EXISTS time_range tstzrange
     GENERATED ALWAYS AS (
       CASE
         WHEN starts_at IS NOT NULL AND ends_at IS NOT NULL
@@ -46,10 +46,20 @@ CREATE INDEX IF NOT EXISTS idx_bookings_time_range_gist
 -- The exclusion constraint itself.
 -- Concurrent INSERTs for overlapping time ranges with active status will produce
 -- an ERROR 23P01 (exclusion_violation) for the losing transaction.
-ALTER TABLE public.bookings
-  ADD CONSTRAINT no_overlap_active_bookings
-  EXCLUDE USING gist (time_range WITH &&)
-  WHERE (status IN ('pending', 'confirmed') AND time_range IS NOT NULL);
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conname = 'no_overlap_active_bookings'
+      AND conrelid = 'public.bookings'::regclass
+  ) THEN
+    ALTER TABLE public.bookings
+      ADD CONSTRAINT no_overlap_active_bookings
+      EXCLUDE USING gist (time_range WITH &&)
+      WHERE (status IN ('pending', 'confirmed') AND time_range IS NOT NULL);
+  END IF;
+END $$;
 
 COMMENT ON CONSTRAINT no_overlap_active_bookings ON public.bookings IS
   'Prevents two pending or confirmed bookings from occupying overlapping time. '
