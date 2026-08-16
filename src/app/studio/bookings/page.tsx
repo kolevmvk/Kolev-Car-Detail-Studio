@@ -1,14 +1,17 @@
 import { requireAdmin } from "@/lib/auth/studio";
-import { createAdminSupabaseClient } from "@/lib/db/admin";
 import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: "Rezervacije" };
 export const dynamic = "force-dynamic";
 
+function firstRelation<T>(value: T | T[] | null | undefined): T | null {
+  if (Array.isArray(value)) return value[0] ?? null;
+  return value ?? null;
+}
+
 export default async function BookingsPage() {
-  await requireAdmin();
-  const db = createAdminSupabaseClient();
+  const { db } = await requireAdmin();
 
   const { data: bookings } = await db
     .from("bookings")
@@ -66,17 +69,17 @@ export default async function BookingsPage() {
                   key={b.id}
                   href={`/studio/bookings/${b.id}`}
                   className="studio-list-item studio-list-item--full"
-                >
-                  <div className="studio-list-item__row">
+                  >
+                    <div className="studio-list-item__row">
                     <span className="studio-list-item__ref">{b.public_reference}</span>
                     <span className={`studio-badge studio-badge--${b.status}`}>
                       {statusLabel(b.status)}
                     </span>
                   </div>
                   <span className="studio-list-item__name">
-                    {(b.services as { name: string } | null)?.name}
+                    {firstRelation<{ name: string }>(b.services)?.name}
                     {" · "}
-                    {(b.customers as { name: string; phone: string } | null)?.name}
+                    {firstRelation<{ name: string; phone: string }>(b.customers)?.name}
                   </span>
                   {b.starts_at && (
                     <span className="studio-list-item__time">

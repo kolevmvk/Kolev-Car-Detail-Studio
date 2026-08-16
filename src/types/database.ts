@@ -36,9 +36,8 @@ export type UserStatus = "active" | "inactive";
 // Use `type` (not `interface`) so these satisfy Record<string, unknown> —
 // required for Database["public"] to extend Supabase's GenericSchema.
 
-export type StudioUserRow = {
-  id: string;
-  email: string;
+export type AdminProfileRow = {
+  user_id: string;
   display_name: string | null;
   role: UserRole;
   status: UserStatus;
@@ -77,6 +76,7 @@ export type CustomerRow = {
 
 export type VehicleRow = {
   id: string;
+  customer_id: string | null;
   make: string;
   model: string;
   year: number | null;
@@ -161,11 +161,10 @@ export type WaitlistEntryRow = {
 export interface Database {
   public: {
     Tables: {
-      studio_users: {
-        Row: StudioUserRow;
+      admin_profiles: {
+        Row: AdminProfileRow;
         Insert: {
-          id: string;
-          email: string;
+          user_id: string;
           display_name?: string | null;
           role: UserRole;
           status?: UserStatus;
@@ -173,8 +172,7 @@ export interface Database {
           last_login_at?: string | null;
         };
         Update: {
-          id?: string;
-          email?: string;
+          user_id?: string;
           display_name?: string | null;
           role?: UserRole;
           status?: UserStatus;
@@ -248,6 +246,7 @@ export interface Database {
         Row: VehicleRow;
         Insert: {
           id?: string;
+          customer_id?: string | null;
           make: string;
           model: string;
           year?: number | null;
@@ -258,6 +257,7 @@ export interface Database {
         };
         Update: {
           id?: string;
+          customer_id?: string | null;
           make?: string;
           model?: string;
           year?: number | null;

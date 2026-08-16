@@ -1,7 +1,6 @@
 "use server";
 
 import { createServerSupabaseClient } from "@/lib/db/server";
-import { createAdminSupabaseClient } from "@/lib/db/admin";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
@@ -12,17 +11,16 @@ async function assertAdmin() {
   } = await sb.auth.getUser();
   if (!user) redirect("/studio/login");
 
-  const db = createAdminSupabaseClient();
-  const { data } = await db
-    .from("studio_users")
-    .select("id, role, status")
-    .eq("id", user.id)
+  const { data } = await sb
+    .from("admin_profiles")
+    .select("user_id, role, status")
+    .eq("user_id", user.id)
     .single();
 
   if (!data || data.status !== "active" || !["owner", "admin"].includes(data.role)) {
     redirect("/studio/login");
   }
-  return { user, db };
+  return { user, db: sb };
 }
 
 // ─── Booking status actions ─────────────────────────────────────────────────

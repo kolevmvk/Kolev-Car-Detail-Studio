@@ -1,13 +1,16 @@
 import { requireAdmin } from "@/lib/auth/studio";
-import { createAdminSupabaseClient } from "@/lib/db/admin";
 import Link from "next/link";
 
 export const metadata = { title: "Pregled" };
 export const dynamic = "force-dynamic";
 
+function firstRelation<T>(value: T | T[] | null | undefined): T | null {
+  if (Array.isArray(value)) return value[0] ?? null;
+  return value ?? null;
+}
+
 export default async function StudioDashboard() {
-  const { studioUser } = await requireAdmin();
-  const db = createAdminSupabaseClient();
+  const { studioUser, db } = await requireAdmin();
 
   const { data: pendingBookings } = await db
     .from("bookings")
@@ -44,7 +47,7 @@ export default async function StudioDashboard() {
               >
                 <span className="studio-list-item__ref">{b.public_reference}</span>
                 <span className="studio-list-item__name">
-                  {(b.services as { name: string } | null)?.name ?? "Usluga"}
+                  {firstRelation<{ name: string }>(b.services)?.name ?? "Usluga"}
                 </span>
                 {b.starts_at && (
                   <span className="studio-list-item__time">

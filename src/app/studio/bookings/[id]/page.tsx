@@ -1,5 +1,4 @@
 import { requireAdmin } from "@/lib/auth/studio";
-import { createAdminSupabaseClient } from "@/lib/db/admin";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -8,14 +7,18 @@ import { BookingActions } from "@/components/studio/BookingActions";
 export const metadata: Metadata = { title: "Rezervacija" };
 export const dynamic = "force-dynamic";
 
+function firstRelation<T>(value: T | T[] | null | undefined): T | null {
+  if (Array.isArray(value)) return value[0] ?? null;
+  return value ?? null;
+}
+
 export default async function BookingDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  await requireAdmin();
+  const { db } = await requireAdmin();
   const { id } = await params;
-  const db = createAdminSupabaseClient();
 
   const { data: booking } = await db
     .from("bookings")
@@ -25,15 +28,22 @@ export default async function BookingDetailPage({
 
   if (!booking) notFound();
 
-  const customer = booking.customers as
-    | { name: string; phone: string; email: string | null; contact_preference: string }
-    | null;
-  const vehicle = booking.vehicles as
-    | { make: string; model: string; year: number | null; color: string | null }
-    | null;
-  const service = booking.services as
-    | { name: string; duration_minutes: number }
-    | null;
+  const customer = firstRelation<{
+    name: string;
+    phone: string;
+    email: string | null;
+    contact_preference: string;
+  }>(booking.customers);
+  const vehicle = firstRelation<{
+    make: string;
+    model: string;
+    year: number | null;
+    color: string | null;
+  }>(booking.vehicles);
+  const service = firstRelation<{
+    name: string;
+    duration_minutes: number;
+  }>(booking.services);
 
   function fmt(iso: string | null) {
     if (!iso) return "—";

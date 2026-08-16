@@ -1,5 +1,4 @@
 import { requireAdmin } from "@/lib/auth/studio";
-import { createAdminSupabaseClient } from "@/lib/db/admin";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { AddWindowForm } from "@/components/studio/AddWindowForm";
@@ -10,8 +9,7 @@ export const metadata: Metadata = { title: "Dostupnost" };
 export const dynamic = "force-dynamic";
 
 export default async function AvailabilityPage() {
-  await requireAdmin();
-  const db = createAdminSupabaseClient();
+  const { db } = await requireAdmin();
 
   const now = new Date().toISOString();
 

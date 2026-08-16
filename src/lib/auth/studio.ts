@@ -2,7 +2,6 @@ import "server-only";
 
 import { redirect } from "next/navigation";
 import { createServerSupabaseClient } from "@/lib/db/server";
-import { createAdminSupabaseClient } from "@/lib/db/admin";
 
 /** Require authenticated admin session. Redirects to /studio/login if not. */
 export async function requireAdmin() {
@@ -13,18 +12,29 @@ export async function requireAdmin() {
 
   if (!user) redirect("/studio/login");
 
-  const adminDb = createAdminSupabaseClient();
-  const { data: studioUser } = await adminDb
-    .from("studio_users")
-    .select("id, role, status, display_name, email")
-    .eq("id", user.id)
+  const { data: adminProfile } = await sb
+    .from("admin_profiles")
+    .select("user_id, role, status, display_name, created_at, last_login_at")
+    .eq("user_id", user.id)
     .single();
 
-  if (!studioUser || studioUser.status !== "active") {
+  if (!adminProfile || adminProfile.status !== "active") {
     // Auth'd user but not a studio user — sign out and redirect.
     await sb.auth.signOut();
     redirect("/studio/login");
   }
 
-  return { user, studioUser };
+  return {
+    db: sb,
+    user,
+    studioUser: {
+      id: adminProfile.user_id,
+      email: user.email ?? "",
+      display_name: adminProfile.display_name,
+      role: adminProfile.role,
+      status: adminProfile.status,
+      created_at: adminProfile.created_at,
+      last_login_at: adminProfile.last_login_at,
+    },
+  };
 }
