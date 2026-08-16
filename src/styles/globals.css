@@ -13,7 +13,7 @@
   --color-text-muted: #8a847a;
   --color-line-subtle: #2a2723;
   --color-accent: #c4913a;
-  --color-accent-dim: #8a6228;
+  --color-accent-dim: #7a5522;
   --ease-reveal: cubic-bezier(0.22, 1, 0.36, 1);
   --pad-x: clamp(1.15rem, 4vw, 3.5rem);
 }
@@ -33,9 +33,7 @@ html {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+  html { scroll-behavior: auto; }
 }
 
 body {
@@ -80,11 +78,9 @@ body {
   pointer-events: auto;
 }
 
-.skip-link:focus {
-  transform: none;
-}
+.skip-link:focus { transform: none; }
 
-/* ─── Site chrome (minimal, fixed overlay) ───────────────────────── */
+/* ─── Site chrome (minimal fixed overlay) ────────────────────────── */
 
 .site-chrome {
   position: fixed;
@@ -108,20 +104,25 @@ body {
   mix-blend-mode: difference;
 }
 
-/* ─── Image utilities ────────────────────────────────────────────── */
+/* ─── Image helpers ──────────────────────────────────────────────── */
 
 .story-img {
   object-fit: cover;
   object-position: center;
 }
 
-.crop-golf-opening { object-position: 50% 48%; }
-.crop-golf-parked  { object-position: 50% 50%; }
-.crop-golf-return  { object-position: 50% 40%; }
-.crop-entry-foam   { object-position: 50% 38%; }
-.crop-headlight    { object-position: 50% 52%; }
+/* Golf protagonist: consistent car alignment across dissolve */
+.crop-golf-time    { object-position: 50% 54%; }
+/* Opening S01: car slightly lower, sky above */
+.crop-golf-opening { object-position: 50% 60%; }
+/* Return S07: mirror of opening */
+.crop-golf-return  { object-position: 50% 56%; }
 
-/* ─── Film grain overlay ─────────────────────────────────────────── */
+.crop-entry-foam   { object-position: 50% 40%; }
+.crop-headlight    { object-position: 52% 44%; }
+.crop-seat         { object-position: 50% 45%; }
+
+/* ─── Film grain ─────────────────────────────────────────────────── */
 
 .grain {
   position: absolute;
@@ -132,7 +133,7 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
 }
 
-/* ─── Typography scale ───────────────────────────────────────────── */
+/* ─── Typography ─────────────────────────────────────────────────── */
 
 .scene__label {
   margin: 0 0 0.85rem;
@@ -165,7 +166,7 @@ body {
 }
 
 .scene__meta {
-  margin: 2rem 0 0;
+  margin: 2.25rem 0 0;
   font-family: var(--font-mono), monospace;
   font-size: 0.68rem;
   letter-spacing: 0.16em;
@@ -173,7 +174,7 @@ body {
   color: var(--color-text-muted);
 }
 
-/* ─── Base scene unit ────────────────────────────────────────────── */
+/* ─── Base scene ─────────────────────────────────────────────────── */
 
 .scene {
   position: relative;
@@ -185,13 +186,11 @@ body {
   overflow: hidden;
 }
 
-/* Full-bleed media layer — sits behind all copy */
+/* Full-bleed media behind all copy */
 .scene__media {
   position: absolute;
   inset: 0;
 }
-
-/* Copy positioning variants */
 
 .scene__copy {
   position: relative;
@@ -201,42 +200,30 @@ body {
 /* Copy at bottom with gradient scrim */
 .scene__copy--low {
   margin-top: auto;
-  background: linear-gradient(transparent, rgb(13 13 13 / 0.88) 44%);
-  padding: 6rem var(--pad-x) calc(2.25rem + env(safe-area-inset-bottom));
+  background: linear-gradient(transparent, rgb(13 13 13 / 0.9) 46%);
+  padding: 6rem var(--pad-x) calc(2.5rem + env(safe-area-inset-bottom));
 }
 
-/* Copy vertically centered (no image) */
-.scene__copy--text-only {
-  margin: auto 0;
-  padding: 4rem var(--pad-x);
-}
-
-/* Copy with just padding (used above an interactive element) */
+/* Inline padding for label-only rows above interactive elements */
 .scene__copy--pad {
   margin-bottom: 1.5rem;
   padding: 0 var(--pad-x);
 }
 
-/* Copy at the bottom of a flex scene, no gradient */
-.scene__copy--bottom {
-  margin-top: auto;
-  padding: 2.5rem var(--pad-x) calc(2.5rem + env(safe-area-inset-bottom));
-}
+/* ─── S01 — NEKAD ────────────────────────────────────────────────── */
 
-/* ─── Scene 01 — Memory / NEKAD ──────────────────────────────────── */
-
+/* Opening word is film-poster scale */
 .scene--memory .scene__headline {
-  /* Extra large for single-word impact */
   font-size: clamp(3.5rem, 14vw, 8rem);
 }
 
-/* ─── Scene 02 — Time / VREME ────────────────────────────────────── */
+/* ─── S02 — VREME ────────────────────────────────────────────────── */
 
-/* Override: time scene manages its own height via sticky child */
+/* Time scene manages height via its sticky child */
 .scene--time {
   display: block;
   min-height: unset;
-  overflow: visible; /* allow sticky child to escape */
+  overflow: visible;
 }
 
 .time__sticky {
@@ -253,44 +240,33 @@ body {
   inset: 0;
 }
 
+/* Interior (parking/later) layer — hidden on mobile to avoid duplication
+   with the sequential mobile-beat below */
 .time__interior {
   position: absolute;
   inset: 0;
   z-index: 1;
+  display: none;
 }
 
-/* Copy at bottom of the sticky frame */
+/* Copy at the bottom of the sticky frame */
 .time__copy {
   position: relative;
   z-index: 2;
   margin-top: auto;
-  background: linear-gradient(transparent, rgb(13 13 13 / 0.88) 44%);
-  padding: 6rem var(--pad-x) calc(2.25rem + env(safe-area-inset-bottom));
+  background: linear-gradient(transparent, rgb(13 13 13 / 0.9) 46%);
+  padding: 6rem var(--pad-x) calc(2.5rem + env(safe-area-inset-bottom));
 }
 
-/* Year markers: positioned at four corners of the time frame */
+/* Year markers: hidden on mobile, single documentary position on desktop */
 .time__year {
-  position: absolute;
-  z-index: 3;
-  font-family: var(--font-mono), monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--color-accent);
-  opacity: 0; /* controlled by Framer Motion */
+  display: none;
 }
 
-.time__year--tl { top: calc(1.5rem + env(safe-area-inset-top)); left: var(--pad-x); }
-.time__year--tr { top: calc(1.5rem + env(safe-area-inset-top)); right: var(--pad-x); }
-.time__year--bl { bottom: 6rem; left: var(--pad-x); }
-.time__year--br { bottom: 6rem; right: var(--pad-x); }
-
-/* Mobile: second beat — interior frame below the exterior one */
+/* Mobile: sequential second beat — same car, later moment */
 .time__mobile-beat {
   position: relative;
   min-height: 72dvh;
-  display: flex;
-  flex-direction: column;
   overflow: hidden;
 }
 
@@ -299,15 +275,6 @@ body {
   inset: 0;
 }
 
-.time__mobile-beat .time__copy {
-  position: relative;
-  z-index: 2;
-  margin-top: auto;
-  background: linear-gradient(transparent, rgb(13 13 13 / 0.88) 44%);
-  padding: 4rem var(--pad-x) calc(2rem + env(safe-area-inset-bottom));
-}
-
-/* Desktop: sticky pinned dissolve */
 @media (min-width: 768px) {
   .scene--time {
     height: 250vh;
@@ -320,21 +287,53 @@ body {
     display: grid;
   }
 
-  .time__media {
-    grid-area: 1 / 1;
-    min-height: 100dvh;
-  }
-
+  .time__media,
   .time__interior {
     grid-area: 1 / 1;
     min-height: 100dvh;
   }
 
+  .time__interior {
+    display: block;
+  }
+
+  /* Aged visual treatment: the parking state feels later, slightly faded */
+  .time__interior .story-img {
+    filter: contrast(1.1) saturate(0.72) brightness(0.95);
+  }
+
+  /* Vignette strengthens the "enclosed/forgotten" feeling of the parked state */
+  .time__interior::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 46%,
+      transparent 32%,
+      rgb(13 13 13 / 0.22) 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
   .time__copy {
     grid-area: 1 / 1;
     align-self: end;
-    z-index: 2;
+    z-index: 3;
     margin-top: 0;
+  }
+
+  /* Documentary year counter: single bottom-right position */
+  .time__year {
+    display: block;
+    position: absolute;
+    z-index: 4;
+    bottom: 5.5rem;
+    right: var(--pad-x);
+    font-family: var(--font-mono), monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    opacity: 0; /* controlled by Framer Motion */
   }
 
   .time__mobile-beat {
@@ -342,22 +341,35 @@ body {
   }
 }
 
-/* ─── Scene 03 — Recognition / PREPOZNAVANJE ─────────────────────── */
+/* ─── S03 — PREPOZNAVANJE ────────────────────────────────────────── */
+/* Film pause: off-white, 120dvh. Text sits at bottom of silence.    */
+/* The user scrolls through empty space before the line lands.        */
 
 .scene--recognition {
   background: var(--color-surface-light);
   color: var(--color-text-primary-light);
+  min-height: 120dvh;
+  min-height: 120svh;
+  justify-content: flex-end; /* text anchors to bottom of the silence */
+}
+
+.scene--recognition .scene__copy {
+  padding: 0 var(--pad-x) calc(5.5rem + env(safe-area-inset-bottom));
+}
+
+.scene--recognition .scene__headline {
+  /* Slightly smaller than S01/S04 — this is a whispered realisation */
+  font-size: clamp(1.95rem, 8.5vw, 5rem);
 }
 
 .scene--recognition .scene__note {
   color: var(--color-accent-dim);
 }
 
-/* ─── Scene 04 — Entry / ULAZ ────────────────────────────────────── */
+/* ─── S04 — ULAZ ─────────────────────────────────────────────────── */
+/* headlight-foam.jpg is portrait (1800×2700) — fills mobile naturally */
 
-/* Entry inherits base scene — dark, close, workshop warmth in the image */
-
-/* ─── Scene 05 — Craft / ZANAT — cinematic cuts ──────────────────── */
+/* ─── S05 — ZANAT — cinematic cut sequence ──────────────────────── */
 
 .scene--craft {
   min-height: unset;
@@ -365,12 +377,12 @@ body {
   overflow: visible;
 }
 
-/* Each cut is a cinematic frame in the sequence */
+/* Each cut is a full cinematic frame */
 .cut {
   position: relative;
-  min-height: 88dvh;
   overflow: hidden;
   background: var(--color-surface-0);
+  /* No margin — cuts flow directly into each other */
 }
 
 .cut__media {
@@ -378,7 +390,7 @@ body {
   inset: 0;
 }
 
-/* Minimal service label — bottom-left, accent mono */
+/* Minimal service annotation — bottom-left, atmosphere only */
 .cut__label {
   position: absolute;
   bottom: 1.75rem;
@@ -386,62 +398,21 @@ body {
   z-index: 3;
   margin: 0;
   font-family: var(--font-mono), monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.2em;
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--color-accent);
 }
 
-/* Video cut: autoplay loop fills the frame */
-.cut--video {
-  min-height: 80dvh;
-}
+/* Cut proportions — varying height creates editing rhythm */
+.cut--macro    { min-height: 100dvh; }    /* headlight: full viewport, slow read */
+.cut--pause    { min-height: 12dvh; }     /* black silence between macro and machine */
+.cut--video    { min-height: 96dvh; }     /* polishing video: nearly full */
+.cut--interior { min-height: 80dvh; }     /* seat fabric: shorter, hard cut feel */
+.cut--close    { min-height: 64dvh; }     /* interior video: intimate, smaller */
+.cut--copy     { min-height: 0; padding: 3.5rem var(--pad-x) 4.5rem; }
 
-/* Accent cut: slightly narrower on desktop for visual rhythm */
-.cut--accent {
-  min-height: 76dvh;
-}
-
-/* Foam cut: shorter beat */
-.cut--foam {
-  min-height: 52dvh;
-}
-
-/* Copy-only cut: no media, pure typography */
-.cut--copy {
-  min-height: 0;
-  padding: 4rem var(--pad-x) 4.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-@media (min-width: 1024px) {
-  .cut {
-    min-height: 100dvh;
-  }
-
-  .cut--video {
-    min-height: 100dvh;
-  }
-
-  .cut--accent {
-    min-height: 80dvh;
-    width: 72%;
-  }
-
-  .cut--foam {
-    min-height: 60dvh;
-    width: 48%;
-    margin-left: auto;
-  }
-
-  .cut--copy {
-    padding: 5rem var(--pad-x) 5.5rem;
-  }
-}
-
-/* ─── Scene 06 — Transformation / TRANSFORMACIJA ─────────────────── */
+/* ─── S06 — TRANSFORMACIJA ──────────────────────────────────────── */
 
 .scene--transformation {
   min-height: unset;
@@ -496,7 +467,6 @@ body {
   color: var(--color-accent);
 }
 
-/* Reduced-motion fallback: static side-by-side */
 .hold-static {
   display: none;
 }
@@ -531,28 +501,28 @@ body {
   object-fit: cover;
 }
 
-.story-video-poster,
-.cut__media .story-img {
-  z-index: 0;
-}
-
 .story-video-poster {
   display: none;
 }
 
-/* ─── Scene 07 — Return / POVRATAK ──────────────────────────────── */
+/* ─── S07 — POVRATAK ─────────────────────────────────────────────── */
+/* Rhymes with S01: same gradient, same label, same low-left copy.   */
+/* Opening asks. Return answers. Smaller type — more words, resolved. */
 
-/* Return inherits base scene — rhymes with opening */
+.scene--return .scene__headline {
+  font-size: clamp(1.85rem, 7.5vw, 4.5rem);
+}
 
-/* ─── Scene 08 — Action / AKCIJA ─────────────────────────────────── */
+/* ─── S08 — AKCIJA ───────────────────────────────────────────────── */
+/* Emotional continuation — not a conversion section. */
 
 .scene--action {
-  justify-content: flex-end;
   background: var(--color-surface-1);
+  justify-content: flex-end;
 }
 
 .scene--action .scene__copy {
-  padding: 4rem var(--pad-x) calc(4rem + env(safe-area-inset-bottom));
+  padding: 0 var(--pad-x) calc(4.5rem + env(safe-area-inset-bottom));
 }
 
 .action__btn {
@@ -577,7 +547,7 @@ body {
 
 @media (min-width: 768px) {
   .scene--action .scene__copy {
-    max-width: 38rem;
+    max-width: 36rem;
   }
 
   .action__btn {
@@ -601,7 +571,7 @@ body {
   color: var(--color-accent);
 }
 
-/* ─── Reduced motion ────────────────────────────────────────────── */
+/* ─── Reduced motion ─────────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -614,26 +584,17 @@ body {
     animation-timeline: auto !important;
   }
 
-  /* Time scene: show the interior frame statically */
+  /* Show the later state immediately (no scroll-linked dissolve) */
   .time__interior {
+    display: block;
     opacity: 1 !important;
   }
 
-  /* Hold-to-reveal: show static side-by-side */
-  .hold-reveal {
-    display: none;
-  }
+  /* Hold-to-reveal → static side-by-side */
+  .hold-reveal { display: none; }
+  .hold-static { display: block; }
 
-  .hold-static {
-    display: block;
-  }
-
-  /* Video: show poster image instead */
-  .story-video {
-    display: none;
-  }
-
-  .story-video-poster {
-    display: block;
-  }
+  /* Videos → poster image */
+  .story-video       { display: none; }
+  .story-video-poster { display: block; }
 }

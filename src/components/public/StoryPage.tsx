@@ -8,13 +8,9 @@ import { TimeScene } from "./TimeFrame";
 /**
  * NEKAD · SADA · PONOVO — the public story experience.
  *
- * Eight cinematic scenes following one ordinary Golf from the memory of
- * being new, through unnoticed decline, into the studio, and back out.
- *
- * Visual continuity: the same grey Golf Mk7 (Soran Ali / Pexels) appears
- * across scenes as the protagonist. It is stock media — not a Kolev
- * customer job. Asset slots in src/features/story/content.ts are ready
- * to accept authentic media without structural changes.
+ * The same grey Golf Mk7 (Soran Ali / Pexels) is the visual protagonist.
+ * Stock media — not a Kolev customer job. Each slot in content.ts accepts
+ * authentic studio media without structural changes.
  */
 export function StoryPage() {
   return (
@@ -23,7 +19,7 @@ export function StoryPage() {
         Auto detajling u Negotinu — od prvog dana do povratka utiska
       </h1>
 
-      {/* ── SCENE 01 — NEKAD ── Memory / The first day ──────────────────── */}
+      {/* ── S01 NEKAD ── Opening / Memory ─────────────────────────────────── */}
       <section className="scene scene--memory" aria-labelledby="s1">
         <div className="scene__media">
           <StoryImage
@@ -42,12 +38,12 @@ export function StoryPage() {
         </div>
       </section>
 
-      {/* ── SCENE 02 — VREME ── Time passing (scroll-linked) ───────────── */}
+      {/* ── S02 VREME ── Time passing ──────────────────────────────────────── */}
       <TimeScene />
 
-      {/* ── SCENE 03 — PREPOZNAVANJE ── Recognition — visual rest ─────── */}
+      {/* ── S03 PREPOZNAVANJE ── Film pause — text sits at bottom of silence ─ */}
       <section className="scene scene--recognition" aria-labelledby="s3">
-        <div className="scene__copy scene__copy--text-only">
+        <div className="scene__copy">
           <p id="s3" className="scene__headline">
             Nije ostario.
             <br />
@@ -61,7 +57,7 @@ export function StoryPage() {
         </div>
       </section>
 
-      {/* ── SCENE 04 — ULAZ ── Entry — foam on headlight, transition ────── */}
+      {/* ── S04 ULAZ ── Entry into studio ──────────────────────────────────── */}
       <section className="scene scene--entry" aria-labelledby="s4">
         <div className="scene__media">
           <StoryImage
@@ -80,12 +76,12 @@ export function StoryPage() {
         </div>
       </section>
 
-      {/* ── SCENE 05 — ZANAT ── Craft — cinematic cut sequence ──────────── */}
+      {/* ── S05 ZANAT ── Craft — edited as film, not media gallery ─────────── */}
       <section className="scene scene--craft" aria-labelledby="s5-label">
         <p className="sr-only" id="s5-label">Zanat</p>
 
-        {/* Cut A: aged headlight — the detail that tells the story */}
-        <div className="cut">
+        {/* Cut A: aged headlight macro — the detail that tells the whole story */}
+        <div className="cut cut--macro">
           <div className="cut__media">
             <StoryImage
               src={media.craftHeadlightAged}
@@ -97,7 +93,10 @@ export function StoryPage() {
           <p className="cut__label" aria-hidden="true">farovi</p>
         </div>
 
-        {/* Cut B: polishing process video — the work of correction */}
+        {/* Dark interstitial — the silence before the machine starts */}
+        <div className="cut cut--pause" aria-hidden="true" />
+
+        {/* Cut B: polishing machine — movement and correction */}
         <div className="cut cut--video">
           <div className="cut__media">
             <StoryVideo
@@ -109,21 +108,21 @@ export function StoryPage() {
           </div>
         </div>
 
-        {/* Cut C: interior extraction — seat fabric, honest process */}
-        <div className="cut cut--accent">
+        {/* Cut C: seat extraction — hard cut into interior fabric */}
+        <div className="cut cut--interior">
           <div className="cut__media">
             <StoryImage
               src={media.craftSeat}
               alt="Mokra ekstrakcija tkanja sedišta — godišnji slojevi idu jedan po jedan."
-              className="story-img"
+              className="story-img crop-seat"
             />
             <span className="grain" aria-hidden="true" />
           </div>
           <p className="cut__label" aria-hidden="true">enterijer</p>
         </div>
 
-        {/* Cut D: interior detailing video — hands, material, care */}
-        <div className="cut cut--foam">
+        {/* Cut D: interior detail video — close human care */}
+        <div className="cut cut--close">
           <div className="cut__media">
             <StoryVideo
               src={video.interiorProcess}
@@ -134,7 +133,7 @@ export function StoryPage() {
           </div>
         </div>
 
-        {/* Copy cut — craft statement */}
+        {/* Craft statement — no image */}
         <div className="cut cut--copy">
           <p className="scene__headline">
             Skidamo godine
@@ -145,7 +144,7 @@ export function StoryPage() {
         </div>
       </section>
 
-      {/* ── SCENE 06 — TRANSFORMACIJA ── Hold-to-reveal ─────────────────── */}
+      {/* ── S06 TRANSFORMACIJA ── Hold-to-reveal ───────────────────────────── */}
       <section className="scene scene--transformation" aria-labelledby="s6">
         <div className="scene__copy scene__copy--pad">
           <p id="s6" className="scene__label">Rad · Rezultat</p>
@@ -153,12 +152,14 @@ export function StoryPage() {
         <HeadlightHold />
       </section>
 
-      {/* ── SCENE 07 — POVRATAK ── Return — Golf back on the road ─────────── */}
+      {/* ── S07 POVRATAK ── Return — echoes S01 ───────────────────────────── */}
+      {/* Same Golf, same gradient, same label, same low-left text. */}
+      {/* Opening = memory. Return = regained attention. */}
       <section className="scene scene--return" aria-labelledby="s7">
         <div className="scene__media">
           <StoryImage
             src={media.returnCar}
-            alt="Isti Golf, drugi osećaj — more i asfalt, sjaj koji se vratio."
+            alt="Isti Golf kraj mora — sjaj koji se vratio zajedno sa pažnjom."
             className="story-img crop-golf-return"
           />
           <span className="grain" aria-hidden="true" />
@@ -175,24 +176,25 @@ export function StoryPage() {
         </div>
       </section>
 
-      {/* ── SCENE 08 — AKCIJA ── Action — natural story end ─────────────── */}
+      {/* ── S08 AKCIJA ── Emotional continuation → booking ────────────────── */}
       <section className="scene scene--action" aria-labelledby="s8">
         <div className="scene__copy">
           <p className="scene__label">Kolev Car Detailing</p>
           <p id="s8" className="scene__headline scene__headline--sm">
-            Hoćeš da vidiš šta
+            Možda mu ne treba
             <br />
-            možemo da vratimo
+            drugi auto.
             <br />
-            tvom autu?
-          </p>
-          <p className="scene__note">
-            Slobodni termini se prikazuju samo kada ih studio stvarno otvori.
+            Možda mu treba
+            <br />
+            drugi utisak.
           </p>
           <Link className="action__btn" href="/booking">
             Pogledaj prvi slobodan termin
           </Link>
-          <p className="scene__meta">Negotin · Srbija</p>
+          <p className="scene__meta">
+            Negotin · Srbija · Termini su realni
+          </p>
         </div>
       </section>
     </article>
