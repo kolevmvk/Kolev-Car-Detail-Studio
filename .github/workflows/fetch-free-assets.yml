@@ -1,0 +1,65 @@
+name: Fetch free detailing assets
+
+on:
+  push:
+    branches:
+      - media/free-stock-assets
+    paths:
+      - '.github/workflows/fetch-free-assets.yml'
+      - 'assets/SOURCES.md'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: media/free-stock-assets
+
+      - name: Download free-use images and videos
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets/images assets/video
+
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/14615262/pexels-photo-14615262.jpeg?auto=compress&cs=tinysrgb&w=1920' -o assets/images/polishing-reflection.jpg
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/31389821/pexels-photo-31389821.jpeg?auto=compress&cs=tinysrgb&w=1600' -o assets/images/interior-wipe.jpg
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/20042055/pexels-photo-20042055.jpeg?auto=compress&cs=tinysrgb&w=1600' -o assets/images/polishing-garage.jpg
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/35149470/pexels-photo-35149470.jpeg?auto=compress&cs=tinysrgb&w=1600' -o assets/images/polishing-door.jpg
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/5233268/pexels-photo-5233268.jpeg?auto=compress&cs=tinysrgb&w=1920' -o assets/images/headlight-restoration.jpg
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/5233264/pexels-photo-5233264.jpeg?auto=compress&cs=tinysrgb&w=1920' -o assets/images/deep-extraction.jpg
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/5693659/pexels-photo-5693659.jpeg?auto=compress&cs=tinysrgb&w=1920' -o assets/images/foam-wash.jpg
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/6873020/pexels-photo-6873020.jpeg?auto=compress&cs=tinysrgb&w=1920' -o assets/images/detailing-brush.jpg
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/12190248/pexels-photo-12190248.jpeg?auto=compress&cs=tinysrgb&w=1600' -o assets/images/clean-interior.jpg
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/29504458/pexels-photo-29504458.jpeg?auto=compress&cs=tinysrgb&w=1920' -o assets/images/foam-front.jpg
+
+          curl -L --fail --retry 3 'https://videos.pexels.com/video-files/6159183/6159183-hd_1920_1080_30fps.mp4' -o assets/video/polishing-closeup-1080p.mp4
+          curl -L --fail --retry 3 'https://videos.pexels.com/video-files/32010541/13643308_1080_1920_30fps.mp4' -o assets/video/foam-wash-vertical-1080p.mp4
+
+          find assets -type f -printf '%p %k KB\n' | sort
+
+          # GitHub rejects files >=100 MiB. Fail early if a source unexpectedly changes.
+          too_big=$(find assets/video -type f -size +95M -print)
+          if [ -n "$too_big" ]; then
+            echo "Video exceeds safe GitHub size limit:"
+            echo "$too_big"
+            exit 1
+          fi
+
+      - name: Commit fetched assets
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/images assets/video
+          if git diff --cached --quiet; then
+            echo 'No asset changes.'
+            exit 0
+          fi
+          git commit -m 'assets: add free Pexels detailing media'
+          git push origin HEAD:media/free-stock-assets
