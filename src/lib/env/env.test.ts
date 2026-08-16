@@ -1,18 +1,37 @@
-import { describe, it, expect } from "vitest";
-import { z } from "zod";
+import { describe, expect, it } from "vitest";
+import { publicEnvSchema, serverEnvSchema } from "./schema";
 
-describe("env schema", () => {
-  it("rejects missing required variables", () => {
-    const schema = z.object({ NEXT_PUBLIC_SUPABASE_URL: z.string().url() });
-    const result = schema.safeParse({ NEXT_PUBLIC_SUPABASE_URL: "" });
+const validPublic = {
+  NEXT_PUBLIC_SUPABASE_URL: "https://dzsotxqkpwszlaethzdt.supabase.co",
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "test-publishable-key",
+  NEXT_PUBLIC_SITE_URL: "http://localhost:3000",
+};
+
+describe("publicEnvSchema", () => {
+  it("accepts valid public variables", () => {
+    expect(publicEnvSchema.parse(validPublic).NEXT_PUBLIC_SITE_URL).toBe("http://localhost:3000");
+  });
+
+  it("rejects a missing publishable key", () => {
+    const result = publicEnvSchema.safeParse({
+      ...validPublic,
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "",
+    });
+    expect(result.success).toBe(false);
+  });
+});
+
+describe("serverEnvSchema", () => {
+  it("requires a service-role key", () => {
+    const result = serverEnvSchema.safeParse({
+      ...validPublic,
+      NODE_ENV: "test",
+      SUPABASE_SERVICE_ROLE_KEY: "",
+    });
     expect(result.success).toBe(false);
   });
 
-  it("accepts a valid URL", () => {
-    const schema = z.object({ NEXT_PUBLIC_SUPABASE_URL: z.string().url() });
-    const result = schema.safeParse({
-      NEXT_PUBLIC_SUPABASE_URL: "https://example.supabase.co",
-    });
-    expect(result.success).toBe(true);
+  it("does not treat the service-role key as a public field", () => {
+    expect("SUPABASE_SERVICE_ROLE_KEY" in publicEnvSchema.shape).toBe(false);
   });
 });

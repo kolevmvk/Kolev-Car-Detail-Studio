@@ -1,11 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    typedRoutes: true,
-  },
+  typedRoutes: true,
   images: {
     formats: ["image/avif", "image/webp"],
+    qualities: [72, 75],
     remotePatterns: [
       {
         protocol: "https",
@@ -33,8 +32,8 @@ const nextConfig: NextConfig = {
             value: [
               "default-src 'self'",
               "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-              "font-src 'self' https://fonts.gstatic.com",
+              "style-src 'self' 'unsafe-inline'",
+              "font-src 'self'",
               "img-src 'self' data: blob: https://dzsotxqkpwszlaethzdt.supabase.co",
               "media-src 'self' blob: https://dzsotxqkpwszlaethzdt.supabase.co",
               "connect-src 'self' https://dzsotxqkpwszlaethzdt.supabase.co wss://dzsotxqkpwszlaethzdt.supabase.co",

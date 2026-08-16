@@ -1,7 +1,23 @@
 # Kolev Car Detail Studio
 
-AI-native product repository for the Kolev Car Detailing public experience, Studio OS, booking system, content engine, analytics and sponsor integrations.
+Public cinematic story and Studio OS for Kolev Car Detailing, Negotin.
 
-This repository is intentionally initialized with product intelligence and agent instructions before framework code.
+## Local
 
-See `AGENTS.md`, `CLAUDE.md`, `docs/` and `skills/` before implementation.
+```bash
+pnpm install
+cp .env.example .env.local
+# set NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY and SUPABASE_SERVICE_ROLE_KEY
+pnpm dev
+```
+
+## Verify
+
+```bash
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm build
+```
+
+See `AGENTS.md` and `docs/` before changing product behavior.
