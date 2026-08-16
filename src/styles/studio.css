@@ -1,0 +1,464 @@
+/* Studio OS — operational interface. High legibility, dense but readable. */
+
+:root {
+  --studio-bg: #0f0f0f;
+  --studio-surface: #181818;
+  --studio-border: #2a2a2a;
+  --studio-text: #e8e4de;
+  --studio-muted: #6b6560;
+  --studio-accent: #c4913a;
+  --studio-success: #4caf72;
+  --studio-danger: #e05252;
+  --studio-pad: clamp(1rem, 3vw, 2rem);
+}
+
+.studio-shell {
+  min-height: 100dvh;
+  background: var(--studio-bg);
+  color: var(--studio-text);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Navigation ─── */
+
+.studio-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.875rem var(--studio-pad);
+  border-bottom: 1px solid var(--studio-border);
+  position: sticky;
+  top: 0;
+  background: var(--studio-bg);
+  z-index: 10;
+}
+
+.studio-nav__mark {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--studio-accent);
+  text-decoration: none;
+}
+
+.studio-nav__links {
+  display: flex;
+  gap: 1.5rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.studio-nav__links a {
+  color: var(--studio-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.studio-nav__links a:hover { color: var(--studio-text); }
+
+/* ─── Layout ─── */
+
+.studio-main {
+  flex: 1;
+  padding: var(--studio-pad);
+  max-width: 64rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.studio-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.studio-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+/* ─── Typography ─── */
+
+.studio-kicker {
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--studio-muted);
+}
+
+.studio-headline {
+  margin: 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.studio-back {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--studio-muted);
+  text-decoration: none;
+}
+
+.studio-back:hover { color: var(--studio-text); }
+
+.studio-empty {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--studio-muted);
+}
+
+.studio-note {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--studio-text);
+  background: var(--studio-surface);
+  padding: 0.75rem 1rem;
+  border-left: 2px solid var(--studio-border);
+}
+
+.studio-link {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--studio-accent);
+  text-decoration: none;
+}
+
+/* ─── Stats ─── */
+
+.studio-stats {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.studio-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem 1.25rem;
+  background: var(--studio-surface);
+  border: 1px solid var(--studio-border);
+}
+
+.studio-stat__value {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--studio-accent);
+}
+
+.studio-stat__label {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--studio-muted);
+}
+
+/* ─── Sections ─── */
+
+.studio-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.studio-section__title {
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--studio-muted);
+}
+
+/* ─── Lists ─── */
+
+.studio-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  border: 1px solid var(--studio-border);
+}
+
+.studio-list-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.875rem 1rem;
+  background: var(--studio-surface);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.1s;
+}
+
+.studio-list-item--full {
+  align-items: flex-start;
+}
+
+a.studio-list-item:hover { background: #1e1e1e; }
+
+.studio-list-item__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.studio-list-item__ref {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--studio-accent);
+}
+
+.studio-list-item__name {
+  font-size: 0.875rem;
+  color: var(--studio-text);
+}
+
+.studio-list-item__time {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  color: var(--studio-muted);
+}
+
+/* ─── Badges ─── */
+
+.studio-badge {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.studio-badge--pending    { background: rgba(196,145,58,0.12); color: var(--studio-accent); }
+.studio-badge--confirmed  { background: rgba(76,175,114,0.12); color: var(--studio-success); }
+.studio-badge--declined,
+.studio-badge--cancelled  { background: rgba(224,82,82,0.1);   color: var(--studio-danger); }
+.studio-badge--completed  { background: rgba(107,101,96,0.15); color: var(--studio-muted); }
+.studio-badge--other      { background: rgba(107,101,96,0.15); color: var(--studio-muted); }
+
+/* ─── Action cards ─── */
+
+.studio-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1px;
+}
+
+.studio-action-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1.25rem;
+  background: var(--studio-surface);
+  border: 1px solid var(--studio-border);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.1s;
+}
+
+.studio-action-card:hover { background: #1e1e1e; }
+
+.studio-action-card__title {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.1rem;
+}
+
+.studio-action-card__desc {
+  font-size: 0.8rem;
+  color: var(--studio-muted);
+}
+
+/* ─── Actions row (booking confirm/cancel) ─── */
+
+.studio-actions-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.studio-error {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  color: var(--studio-danger);
+}
+
+/* ─── Data list ─── */
+
+.studio-dl {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--studio-border);
+}
+
+.studio-dl__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--studio-border);
+}
+
+.studio-dl__row:last-child { border-bottom: 0; }
+
+.studio-dl dt {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--studio-muted);
+  flex-shrink: 0;
+}
+
+.studio-dl dd {
+  margin: 0;
+  font-size: 0.875rem;
+  text-align: right;
+}
+
+.studio-dl dd a { color: var(--studio-accent); }
+
+/* ─── Forms ─── */
+
+.studio-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 28rem;
+}
+
+.studio-form--inline {
+  padding: 1rem;
+  background: var(--studio-surface);
+  border: 1px solid var(--studio-border);
+}
+
+.studio-form__error {
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  background: rgba(224,82,82,0.08);
+  border-left: 2px solid var(--studio-danger);
+  font-size: 0.85rem;
+  color: var(--studio-danger);
+}
+
+.studio-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.studio-label {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--studio-muted);
+}
+
+.studio-input {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  background: var(--studio-bg);
+  border: 1px solid var(--studio-border);
+  color: var(--studio-text);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  border-radius: 0;
+  -webkit-appearance: none;
+  transition: border-color 0.12s;
+}
+
+.studio-input:focus { border-color: var(--studio-accent); }
+
+/* ─── Buttons ─── */
+
+.studio-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.25rem;
+  background: var(--studio-accent);
+  color: #16110a;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.12s;
+}
+
+.studio-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.studio-btn:hover:not(:disabled) { background: #d4a24a; }
+
+.studio-btn--sm {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+.studio-btn--confirm {
+  background: var(--studio-success);
+  color: #0a1a0f;
+}
+.studio-btn--confirm:hover:not(:disabled) { background: #5dc880; }
+
+.studio-btn--decline {
+  background: transparent;
+  color: var(--studio-danger);
+  border: 1px solid var(--studio-danger);
+}
+.studio-btn--decline:hover:not(:disabled) { background: rgba(224,82,82,0.08); }
+
+/* ─── Login page ─── */
+
+.studio-login {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem var(--studio-pad);
+  max-width: 26rem;
+  margin: 0 auto;
+}
+
+.studio-login__mark {
+  margin: 0 0 2rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--studio-accent);
+}
+
+.studio-login__headline {
+  margin: 0 0 2rem;
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  font-size: 2rem;
+  line-height: 1;
+}
