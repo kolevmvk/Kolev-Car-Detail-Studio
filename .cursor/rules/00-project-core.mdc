@@ -1,0 +1,15 @@
+---
+description: Core invariants for Kolev Car Detail Studio
+alwaysApply: true
+---
+
+Read `AGENTS.md` as the canonical project contract.
+
+Keep this rule lean. Before work, open only the task-relevant spec/skill.
+
+Never regress into a generic local-service template. Public UI must be mobile-first, visually specific to the one-car restoration story, and truthful about bookings, capacity, reviews and sponsors.
+
+For public visual work read `docs/VISUAL-DIRECTION.md` and `docs/STORY.md`.
+For admin/booking read `docs/STUDIO-OS.md`.
+For sponsors read `docs/SPONSORS.md`.
+For context/token discipline read `docs/AI-CONTEXT.md`.
