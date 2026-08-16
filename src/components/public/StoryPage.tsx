@@ -133,7 +133,7 @@ export function StoryPage() {
           </div>
         </div>
 
-        {/* Craft statement — no image */}
+        {/* Craft statement + service enumeration — no background image */}
         <div className="cut cut--copy">
           <p className="scene__headline">
             Skidamo godine
@@ -141,6 +141,12 @@ export function StoryPage() {
             sa izgleda.
           </p>
           <p className="scene__note">Ne sa papira.</p>
+          <p className="craft__kicker" aria-hidden="true">Usluge · Kolev</p>
+          <ul className="craft__services" aria-label="Šta radimo">
+            <li>Obnova farova</li>
+            <li>Dubinsko čišćenje enterijera</li>
+            <li>Kompletna restauracija</li>
+          </ul>
         </div>
       </section>
 
@@ -177,7 +183,7 @@ export function StoryPage() {
       </section>
 
       {/* ── S08 AKCIJA ── Emotional continuation → booking ────────────────── */}
-      <section className="scene scene--action" aria-labelledby="s8">
+      <section id="booking-entry" className="scene scene--action" aria-labelledby="s8">
         <div className="scene__copy">
           <p className="scene__label">Kolev Car Detailing</p>
           <p id="s8" className="scene__headline scene__headline--sm">

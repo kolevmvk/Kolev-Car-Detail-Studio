@@ -45,9 +45,9 @@ test.describe("Booking page — no DB state", () => {
   test("booking page shows service UI or error — never fake slots", async ({ page }) => {
     await page.goto("/booking");
 
-    // Either service selection or error state — never arbitrary times
+    // Either service selection or a deliberate graceful state — never arbitrary times
     const hasServiceHeadline = await page.getByText("Šta").isVisible().catch(() => false);
-    const hasErrorState = await page.getByText(/greška|Kapacitet/i).isVisible().catch(() => false);
+    const hasErrorState = await page.getByText(/nedostupnost|otvorenih termina/i).isVisible().catch(() => false);
 
     expect(hasServiceHeadline || hasErrorState).toBe(true);
 

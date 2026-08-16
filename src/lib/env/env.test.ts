@@ -12,6 +12,14 @@ describe("publicEnvSchema", () => {
     expect(publicEnvSchema.parse(validPublic).NEXT_PUBLIC_SITE_URL).toBe("http://localhost:3000");
   });
 
+  it("uses the production default when NEXT_PUBLIC_SITE_URL is absent", () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { NEXT_PUBLIC_SITE_URL: _siteUrl, ...withoutSiteUrl } = validPublic;
+    expect(publicEnvSchema.parse(withoutSiteUrl).NEXT_PUBLIC_SITE_URL).toBe(
+      "https://kolev-car-detail-studio.vercel.app",
+    );
+  });
+
   it("rejects a missing publishable key", () => {
     const result = publicEnvSchema.safeParse({
       ...validPublic,

@@ -172,7 +172,6 @@ export function BookingFlow({ services }: BookingFlowProps) {
   if (step === "service") {
     return (
       <div className="bk-flow">
-        <p className="bk-kicker">Usluge</p>
         <h1 className="bk-headline">
           Šta
           <br />
@@ -216,7 +215,7 @@ export function BookingFlow({ services }: BookingFlowProps) {
         <h2 className="bk-headline bk-headline--sm">
           Najbliži
           <br />
-          termini
+          slobodni termini
         </h2>
         {error && <p className="bk-error">{error}</p>}
         {isPending && slots.length === 0 && (
@@ -228,15 +227,15 @@ export function BookingFlow({ services }: BookingFlowProps) {
               Trenutno nema otvorenih termina.
             </p>
             <p className="bk-empty__sub">
-              Možete se prijaviti na listu čekanja i dobiti obaveštenje kada se termin
-              otvori.
+              Vlasnik studija sam otvara termine prema svom rasporedu. Ostavite
+              kontakt i bićete obavešteni čim se termin otvori.
             </p>
             <button
               className="bk-btn bk-btn--ghost"
               onClick={() => setStep("waitlist")}
               type="button"
             >
-              Lista čekanja
+              Ostavi kontakt
             </button>
           </div>
         )}
@@ -429,8 +428,9 @@ export function BookingFlow({ services }: BookingFlowProps) {
           )}
         </dl>
         <p className="bk-notice">
-          Rezervacija je zahtev — vlasnik studija potvrđuje termin. Bićete
-          kontaktirani na navedeni broj telefona.
+          Ovo je zahtev, ne potvrđena rezervacija. Vlasnik studija potvrđuje
+          svaki termin lično i kontaktira vas direktno na navedeni broj.
+          Finalna cena zavisi od stanja vozila i utvrđuje se na licu mesta.
         </p>
         <button
           className="bk-btn bk-btn--primary"
@@ -452,9 +452,9 @@ export function BookingFlow({ services }: BookingFlowProps) {
         <h2 className="bk-headline bk-headline--sm">
           {isWaitlist ? (
             <>
-              Prijavili ste se
+              Kontakt
               <br />
-              na listu čekanja.
+              primljen.
             </>
           ) : (
             <>
@@ -470,18 +470,19 @@ export function BookingFlow({ services }: BookingFlowProps) {
               Referenca: <strong>{publicRef}</strong>
             </p>
             <p className="bk-success__body">
-              Vlasnik studija će vas kontaktirati na broj koji ste naveli kako bi
-              potvrdio termin. Termin nije zagarantovan dok ne dobijete potvrdu.
+              Vlasnik studija će vas kontaktirati direktno kako bi potvrdio termin.
+              Termin nije zagarantovan dok ne dobijete potvrdu telefonom.
             </p>
           </>
         )}
         {isWaitlist && (
           <p className="bk-success__body">
-            Kada se termin otvori, bićete kontaktirani. Hvala na strpljenju.
+            Čim vlasnik otvori termin, kontaktiraćemo vas direktno. Hvala na
+            strpljenju.
           </p>
         )}
         <Link className="bk-btn bk-btn--ghost" href="/">
-          Nazad na priču
+          ← Nazad na priču
         </Link>
       </div>
     );
@@ -500,8 +501,8 @@ export function BookingFlow({ services }: BookingFlowProps) {
           čekanja
         </h2>
         <p className="bk-desc">
-          Trenutno nema otvorenih termina. Ostavite kontakt i bićete
-          prvi obavešteni kada vlasnik otvori novi termin.
+          Ostavite ime i telefon. Čim vlasnik otvori termin za ovu uslugu,
+          direktno vas kontaktiramo.
         </p>
         {error && <p className="bk-error">{error}</p>}
         <form className="bk-form" onSubmit={handleWaitlistSubmit} noValidate>

@@ -3,7 +3,12 @@ import { z } from "zod";
 export const publicEnvSchema = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: z.string().min(1),
-  NEXT_PUBLIC_SITE_URL: z.string().url(),
+  // Optional at build time: used for OG metadataBase only, not for DB client creation.
+  NEXT_PUBLIC_SITE_URL: z
+    .string()
+    .url()
+    .optional()
+    .default("https://kolev-car-detail-studio.vercel.app"),
 });
 
 export const serverEnvSchema = publicEnvSchema.extend({
