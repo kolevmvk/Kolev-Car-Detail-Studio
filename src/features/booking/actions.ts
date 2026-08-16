@@ -1,7 +1,7 @@
 "use server";
 
 import { headers } from "next/headers";
-import { createAdminSupabaseClient } from "@/lib/db/admin";
+import { createServerSupabaseClient } from "@/lib/db/server";
 import { generateSlots, isSlotAvailable } from "@/features/availability/engine";
 import {
   GetSlotsInput,
@@ -16,7 +16,7 @@ import {
 // ─── getServices ────────────────────────────────────────────────────────────
 
 export async function getServices(): Promise<ServicePublic[]> {
-  const db = createAdminSupabaseClient();
+  const db = await createServerSupabaseClient();
   const { data, error } = await db
     .from("services")
     .select("id, slug, name, short_description, booking_mode, duration_minutes, price_mode, price_amount_minor, currency")
@@ -44,7 +44,7 @@ export async function getAvailableSlots(
   rawInput: unknown,
 ): Promise<GetSlotsResult> {
   const input = GetSlotsInput.parse(rawInput);
-  const db = createAdminSupabaseClient();
+  const db = await createServerSupabaseClient();
 
   // Fetch service to get duration/buffer — never trust client-supplied values.
   const { data: service, error: svcErr } = await db
@@ -153,7 +153,7 @@ export async function createBooking(
   }
   const input = parsed.data;
 
-  const db = createAdminSupabaseClient();
+  const db = await createServerSupabaseClient();
 
   // Re-fetch service — never trust client-supplied duration/price.
   const { data: service, error: svcErr } = await db
@@ -238,55 +238,60 @@ export async function createBooking(
   }
 
   // Create customer, vehicle, and booking atomically using a Postgres function
-  // or sequential inserts within the same admin client (service_role bypasses RLS).
+  // or sequential inserts with server-generated IDs/references.
   // The DB exclusion constraint is the final guard against concurrent overlap.
+  const customerId = crypto.randomUUID();
+  const vehicleId = crypto.randomUUID();
+  const publicReference = crypto
+    .randomUUID()
+    .replace(/-/g, "")
+    .slice(0, 10)
+    .toUpperCase();
 
-  const { data: customer, error: custErr } = await db
+  const { error: custErr } = await db
     .from("customers")
     .insert({
+      id: customerId,
       name: input.customer.name,
       phone: input.customer.phone,
       email: input.customer.email || null,
       contact_preference: input.customer.contactPreference,
-    })
-    .select("id")
-    .single();
+    });
 
-  if (custErr || !customer) {
+  if (custErr) {
     return { ok: false, error: "Greška pri čuvanju podataka. Pokušajte ponovo." };
   }
 
-  const { data: vehicle, error: vehErr } = await db
+  const { error: vehErr } = await db
     .from("vehicles")
     .insert({
+      id: vehicleId,
+      customer_id: customerId,
       make: input.vehicle.make,
       model: input.vehicle.model,
       year: input.vehicle.year ?? null,
       color: input.vehicle.color ?? null,
-    })
-    .select("id")
-    .single();
+    });
 
-  if (vehErr || !vehicle) {
+  if (vehErr) {
     return { ok: false, error: "Greška pri čuvanju podataka vozila." };
   }
 
-  const { data: booking, error: bkErr } = await db
+  const { error: bkErr } = await db
     .from("bookings")
     .insert({
-      customer_id: customer.id,
-      vehicle_id: vehicle.id,
+      public_reference: publicReference,
+      customer_id: customerId,
+      vehicle_id: vehicleId,
       service_id: input.serviceId,
       starts_at: startsAt.toISOString(),
       ends_at: endsAt.toISOString(),
       status: "pending",
       source: "website",
       customer_note: input.customerNote ?? null,
-    })
-    .select("id, public_reference, status, starts_at, service_id")
-    .single();
+    });
 
-  if (bkErr || !booking) {
+  if (bkErr) {
     // The exclusion constraint violation surfaces here.
     if (bkErr?.code === "23P01") {
       return {
@@ -300,10 +305,10 @@ export async function createBooking(
   return {
     ok: true,
     booking: {
-      publicReference: booking.public_reference,
-      status: booking.status,
-      startsAt: booking.starts_at,
-      serviceId: booking.service_id,
+      publicReference,
+      status: "pending",
+      startsAt: startsAt.toISOString(),
+      serviceId: input.serviceId,
     },
   };
 }
@@ -319,7 +324,7 @@ export async function joinWaitlist(
   }
   const input = parsed.data;
 
-  const db = createAdminSupabaseClient();
+  const db = await createServerSupabaseClient();
 
   const { error } = await db.from("waitlist_entries").insert({
     service_id: input.serviceId,
