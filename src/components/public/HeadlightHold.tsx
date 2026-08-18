@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
+import { motion } from "framer-motion";
 import { useRef } from "react";
 import { media } from "@/features/story/content";
 import { StoryImage } from "./StoryImage";
@@ -16,8 +16,6 @@ import { StoryImage } from "./StoryImage";
  */
 export function HeadlightHold() {
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const clipProgress = useMotionValue(0);
-  const rotX = useMotionTemplate`rotateX(${useMotionValue(0)}deg)`;
 
   const handlePointerDown = () => {
     if (typeof navigator !== "undefined" && navigator.vibrate) {

@@ -1,6 +1,7 @@
-import Link from "next/link";
 import { media, spatial, video } from "@/features/story/content";
 import { HeadlightHold } from "./HeadlightHold";
+import { MagneticCta } from "./MagneticCta";
+import { Reveal } from "./Reveal";
 import { SpatialScene } from "./spatial/SpatialScene";
 import { StoryImage } from "./StoryImage";
 import { StoryVideo } from "./StoryVideo";
@@ -42,16 +43,20 @@ export function StoryPage() {
       {/* ── S03 PREPOZNAVANJE ── Film pause — text sits at bottom of silence ─ */}
       <section className="scene scene--recognition" aria-labelledby="s3">
         <div className="scene__copy">
-          <p id="s3" className="scene__headline">
-            Nije ostario.
-            <br />
-            Zapušten je.
-          </p>
-          <p className="scene__note">
-            Nije mu prošlo vreme.
-            <br />
-            Prošao mu je sjaj.
-          </p>
+          <Reveal>
+            <p id="s3" className="scene__headline">
+              Nije ostario.
+              <br />
+              Zapušten je.
+            </p>
+          </Reveal>
+          <Reveal delay={0.12}>
+            <p className="scene__note">
+              Nije mu prošlo vreme.
+              <br />
+              Prošao mu je sjaj.
+            </p>
+          </Reveal>
         </div>
       </section>
 
@@ -66,11 +71,13 @@ export function StoryPage() {
           <span className="grain" aria-hidden="true" />
         </div>
         <div className="scene__copy scene__copy--low">
-          <p id="s4" className="scene__headline">
-            Auto ulazi.
-            <br />
-            Posao ostaje.
-          </p>
+          <Reveal>
+            <p id="s4" className="scene__headline">
+              Auto ulazi.
+              <br />
+              Posao ostaje.
+            </p>
+          </Reveal>
         </div>
       </section>
 
@@ -147,12 +154,16 @@ export function StoryPage() {
 
         {/* Craft statement — no image */}
         <div className="cut cut--copy">
-          <p className="scene__headline">
-            Skidamo godine
-            <br />
-            sa izgleda.
-          </p>
-          <p className="scene__note">Ne sa papira.</p>
+          <Reveal>
+            <p className="scene__headline">
+              Skidamo godine
+              <br />
+              sa izgleda.
+            </p>
+          </Reveal>
+          <Reveal delay={0.12}>
+            <p className="scene__note">Ne sa papira.</p>
+          </Reveal>
         </div>
       </section>
 
@@ -194,18 +205,20 @@ export function StoryPage() {
       <section className="scene scene--action" aria-labelledby="s8">
         <div className="scene__copy">
           <p className="scene__label">Kolev Car Detailing</p>
-          <p id="s8" className="scene__headline scene__headline--sm">
-            Možda mu ne treba
-            <br />
-            drugi auto.
-            <br />
-            Možda mu treba
-            <br />
-            drugi utisak.
-          </p>
-          <Link className="action__btn" href="/booking">
+          <Reveal>
+            <p id="s8" className="scene__headline scene__headline--sm">
+              Možda mu ne treba
+              <br />
+              drugi auto.
+              <br />
+              Možda mu treba
+              <br />
+              drugi utisak.
+            </p>
+          </Reveal>
+          <MagneticCta className="action__btn" href="/booking">
             Pogledaj prvi slobodan termin
-          </Link>
+          </MagneticCta>
           <p className="scene__meta">
             Negotin · Srbija · Termini su realni
           </p>

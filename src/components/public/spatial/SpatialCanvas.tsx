@@ -2,6 +2,7 @@
 
 import { Environment, MeshReflectorMaterial } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Bloom, EffectComposer, Vignette } from "@react-three/postprocessing";
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
@@ -87,7 +88,12 @@ function CarPlane({
         ref={materialRef}
         map={state.texture}
         transparent
-        alphaTest={0.35}
+        // Deliberately a hard cutoff, not smooth alpha blending: the source
+        // segmentation's edge pixels carry old-background color
+        // contamination, so blending them in reads as a hazy halo around
+        // the car — a harder discard threshold hides that better than a
+        // "more correct" soft edge does, given this specific asset.
+        alphaTest={0.4}
         roughness={0.38}
         metalness={0.25}
         clearcoat={1}
@@ -199,12 +205,17 @@ export function SpatialCanvas({
   return (
     <Canvas
       dpr={lowPower ? [1, 1.3] : [1, 1.8]}
-      gl={{ antialias: true, powerPreference: "high-performance", toneMappingExposure: 1.35 }}
+      gl={{ antialias: true, powerPreference: "high-performance" }}
       camera={{ fov: 34, position: [0, 1.35, 4.6] }}
       shadows={!lowPower}
       frameloop={active ? "always" : "never"}
-      onCreated={({ scene }) => {
+      onCreated={({ scene, gl }) => {
         scene.background = null;
+        // toneMappingExposure must be set on the renderer instance after
+        // construction — passing it inside the `gl` config object is a
+        // no-op because THREE.WebGLRenderer's constructor doesn't read it.
+        gl.toneMapping = THREE.ACESFilmicToneMapping;
+        gl.toneMappingExposure = 1.2;
       }}
     >
       <fog attach="fog" args={[fogColor, 4, 11]} />
@@ -218,6 +229,21 @@ export function SpatialCanvas({
       <Floor lowPower={lowPower} />
 
       <Rig progressRef={progressRef} yawRange={yawRange} carMaterialRef={carMaterialRef} />
+
+      {/* Filmic finish — skipped on low-power mobile, it's pure polish, not
+          load-bearing for the scene reading correctly without it. */}
+      {!lowPower && (
+        <EffectComposer multisampling={0} enableNormalPass={false}>
+          <Bloom
+            intensity={0.18}
+            luminanceThreshold={0.88}
+            luminanceSmoothing={0.15}
+            mipmapBlur
+            radius={0.35}
+          />
+          <Vignette eskil={false} offset={0.3} darkness={0.6} />
+        </EffectComposer>
+      )}
     </Canvas>
   );
 }
