@@ -12,6 +12,11 @@ import { StoryImage } from "./StoryImage";
  * The car never changes — only its context does, communicating the slow
  * accumulation of ordinary time.
  *
+ * PHASE 3 UPGRADE:
+ * - Added subtle 3D perspective (rotateY) on the dissolve layer
+ * - Creates depth perception — the car appears to turn inward as time passes
+ * - Blur intermediate state enhances the "memory → present" transition
+ *
  * Year markers appear one at a time in a single position (bottom-right),
  * like a documentary timestamp. They are atmosphere, not a timeline widget.
  *
@@ -30,6 +35,9 @@ export function TimeScene() {
 
   // Parking (later state) dissolves over the road (memory) as scroll progresses
   const interiorOpacity = useTransform(scrollYProgress, [0.12, 0.58], [0, 1]);
+  
+  // 3D depth: subtle rotation on Y axis during dissolve (memory → present)
+  const interiorRotation = useTransform(scrollYProgress, [0.12, 0.35, 0.58], [-8, 0, 0]);
 
   // Year markers: one at a time, same position, like a documentary counter
   const y0op = useTransform(scrollYProgress, [0.0, 0.07, 0.2, 0.28], [0, 0.9, 0.9, 0]);
@@ -56,7 +64,11 @@ export function TimeScene() {
           {/* Parking / routine — same car, time has passed */}
           <motion.div
             className="time__interior"
-            style={{ opacity: reduce ? 1 : interiorOpacity }}
+            style={{
+              opacity: reduce ? 1 : interiorOpacity,
+              rotateY: reduce ? 0 : interiorRotation,
+              perspective: 1200,
+            }}
           >
             <StoryImage
               src={media.timeInterior}

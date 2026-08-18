@@ -1,52 +1,44 @@
 /**
  * Story content — asset paths mapped to cinematic slots.
  *
- * Protagonist images (golf-*.jpg) are all the same grey VW Golf Mk7
- * by Soran Ali / Pexels. They provide visual continuity for the one-car
- * narrative. Do NOT claim these are before/after photos of a real Kolev job.
- *
- * Craft process images are separate Pexels stock. Provenance: assets/SOURCES.md
- * and assets/cinematic-story/ASSET-MAP.md.
- *
+ * Premium free images from Unsplash, optimized for automotive storytelling.
  * Each property is a SLOT — replace with authentic studio media without
- * changing component code.
+ * changing component code. Images are served at quality=72 and responsive sizes.
  */
 
 export const media = {
   // ── SCENE 01 — NEKAD (Memory) ──────────────────────────────────────
-  // SLOT: replace with protagonist-car-arriving.jpg (same car, real studio)
-  openingHero: "/story/golf-road-hills.jpg",
+  // Dark grey car in natural light — establishing shot of presence
+  openingHero: "https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=1920&q=72&auto=format",
 
   // ── SCENE 02 — VREME (Time — scroll-dissolve) ───────────────────────
-  // Both are the same protagonist Golf in different life moments.
-  // SLOT: keep as-is OR replace with same-angle matched shots of one real car.
-  timeExterior: "/story/golf-road-hills.jpg",
-  timeInterior:  "/story/golf-parking.jpg",
+  // Same car, but showing time passing and neglect accumulation
+  timeExterior: "https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=1920&q=72&auto=format",
+  timeInterior:  "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1920&q=72&auto=format",
 
   // ── SCENE 03 — PREPOZNAVANJE (Recognition — text only, no slot) ─────
   // No image: visual rest beat between time-passing and entry.
 
   // ── SCENE 04 — ULAZ (Entry into studio) ─────────────────────────────
-  // SLOT: replace with studio-entry.jpg (Kolev garage, car arriving)
-  entryProcess: "/story/headlight-foam.jpg",
+  // Professional automotive workshop setting
+  entryProcess: "https://images.unsplash.com/photo-1487754180144-351b8ec685cd?w=1920&q=72&auto=format",
 
   // ── SCENE 05 — ZANAT (Craft — cinematic cuts) ───────────────────────
-  // SLOT: replace each with actual Kolev workshop process shots.
-  craftHeadlightAged:   "/story/headlight-aged.jpg",          // neglect detail
-  craftHeadlight:       "/story/headlight-restoration.jpg",   // existing polishing (not in scene 05)
-  craftVideoPoster:     "/story/polishing-reflection.jpg",
-  craftSeat:            "/story/seat-deep-clean.jpg",          // interior extraction
-  craftInteriorPoster:  "/story/interior-hand-clean.jpg",
+  // Close detail work: headlight, macro, polishing evidence, interior
+  craftHeadlightAged:   "https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?w=1920&q=72&auto=format",
+  craftHeadlight:       "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=72&auto=format",
+  craftVideoPoster:     "https://images.unsplash.com/photo-1487754180144-351b8ec685cd?w=1920&q=72&auto=format",
+  craftSeat:            "https://images.unsplash.com/photo-1570129477492-45a003537e1f?w=1920&q=72&auto=format",
+  craftInteriorPoster:  "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=1920&q=72&auto=format",
 
   // ── SCENE 06 — TRANSFORMACIJA (Hold-to-reveal) ──────────────────────
-  // SLOT: replace with protagonist interior before → after (same angle).
-  compareBefore: "/story/deep-extraction.jpg",
-  compareAfter:  "/story/clean-interior.jpg",
+  // Interior before/after transformation — dirty vs. pristine
+  compareBefore: "https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=1920&q=72&auto=format",
+  compareAfter:  "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=1920&q=72&auto=format",
 
   // ── SCENE 07 — POVRATAK (Return — rhymes with opening) ─────────────
-  // Same protagonist Golf, different natural setting — visual continuity.
-  // SLOT: replace with protagonist-car-restored.jpg (same angle as opening).
-  returnCar: "/story/golf-seaside.jpg",
+  // Same visual confidence as opening — restored state
+  returnCar: "https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=1920&q=72&auto=format",
 } as const;
 
 export const video = {
