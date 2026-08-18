@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { media, video } from "@/features/story/content";
-import { CameraFrame } from "./CameraFrame";
+import { media, spatial, video } from "@/features/story/content";
 import { HeadlightHold } from "./HeadlightHold";
-import { HeroCinematic } from "./hero/HeroCinematic";
+import { SpatialScene } from "./spatial/SpatialScene";
 import { StoryImage } from "./StoryImage";
 import { StoryVideo } from "./StoryVideo";
 import { TimeScene } from "./TimeFrame";
@@ -21,8 +20,21 @@ export function StoryPage() {
         Auto detajling u Negotinu — od prvog dana do povratka utiska
       </h1>
 
-      {/* ── S01 NEKAD ── Opening / Memory — interactive WebGL scene ────────── */}
-      <HeroCinematic />
+      {/* ── S01 NEKAD ── Opening / Memory — spatial WebGL scene ─────────────── */}
+      <SpatialScene
+        id="s1"
+        className="spatial--hero"
+        bgSrc={spatial.hero.bg}
+        carSrc={spatial.hero.car}
+        mirrorText="Kolev"
+        yawRange={[-0.6, 0.12]}
+        fogColor="#0d0d0d"
+        fallbackSrc={media.openingHero}
+        fallbackAlt="Sivi Golf na putu kroz brda — auto kad je još bio centar pažnje."
+        fallbackCropClass="crop-golf-opening"
+        label="Studio · Negotin"
+        headline="Sećaš se?"
+      />
 
       {/* ── S02 VREME ── Time passing ──────────────────────────────────────── */}
       <TimeScene />
@@ -152,29 +164,31 @@ export function StoryPage() {
         <HeadlightHold />
       </section>
 
-      {/* ── S07 POVRATAK ── Return — echoes S01 ───────────────────────────── */}
-      {/* Same Golf, same gradient, same label, same low-left text. */}
-      {/* Opening = memory. Return = regained attention. */}
-      <section className="scene scene--return" aria-labelledby="s7">
-        <CameraFrame>
-          <StoryImage
-            src={media.returnCar}
-            alt="Isti Golf kraj mora — sjaj koji se vratio zajedno sa pažnjom."
-            className="story-img crop-golf-return"
-          />
-          <span className="grain" aria-hidden="true" />
-        </CameraFrame>
-        <div className="scene__copy scene__copy--low">
-          <p className="scene__label">Studio · Negotin</p>
-          <p id="s7" className="scene__headline">
+      {/* ── S07 POVRATAK ── Return — echoes S01, same spatial engine ───────── */}
+      {/* Opening = memory. Return = regained attention. Same car, same */}
+      {/* studio light, warmer fog — the scene itself has changed, not just the photo. */}
+      <SpatialScene
+        id="s7"
+        className="spatial--return"
+        bgSrc={spatial.return.bg}
+        carSrc={spatial.return.car}
+        mirrorText="Kolev"
+        yawRange={[-0.15, 0.55]}
+        fogColor="#1a1410"
+        fallbackSrc={media.returnCar}
+        fallbackAlt="Isti Golf kraj mora — sjaj koji se vratio zajedno sa pažnjom."
+        fallbackCropClass="crop-golf-return"
+        label="Studio · Negotin"
+        headline={
+          <>
             Ne vraćamo vreme.
             <br />
             Vraćamo ono što je
             <br />
             vreme sakrilo.
-          </p>
-        </div>
-      </section>
+          </>
+        }
+      />
 
       {/* ── S08 AKCIJA ── Emotional continuation → booking ────────────────── */}
       <section className="scene scene--action" aria-labelledby="s8">

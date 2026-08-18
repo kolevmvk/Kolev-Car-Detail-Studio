@@ -221,17 +221,17 @@ body {
   padding: 0 var(--pad-x);
 }
 
-/* ─── S01 — NEKAD — interactive WebGL scene ─────────────────────────── */
+/* ─── Spatial WebGL scenes (S01 hero, S07 return) ───────────────────── */
 
 /* Tall scroll track — its length is the scrub distance GSAP reads progress from */
-.hero-cine {
+.spatial {
   position: relative;
   min-height: 260dvh;
   background: var(--color-surface-0);
 }
 
 /* Pinned viewport-height stage — canvas, fallback photo, overlay all live here */
-.hero-cine__stage {
+.spatial__stage {
   position: sticky;
   top: 0;
   height: 100dvh;
@@ -240,22 +240,22 @@ body {
   background: var(--color-surface-0);
 }
 
-.hero-cine__canvas {
+.spatial__canvas {
   position: absolute;
   inset: 0;
 }
 
-.hero-cine__canvas canvas {
+.spatial__canvas canvas {
   display: block;
   width: 100% !important;
   height: 100% !important;
 }
 
-.hero-cine__grain {
+.spatial__grain {
   z-index: 1;
 }
 
-.hero-cine__overlay {
+.spatial__overlay {
   position: absolute;
   inset: 0;
   z-index: 2;
@@ -264,29 +264,17 @@ body {
   transition: opacity 0.15s linear;
 }
 
-/* Opening word is film-poster scale */
-.hero-cine__headline {
+/* Opening word is film-poster scale; return has more words, smaller/resolved */
+.spatial--hero .scene__headline {
   font-size: clamp(3.5rem, 14vw, 8rem);
 }
 
-/* KOLEV catches the lit surface behind it — brand embedded in the light itself */
-.hero-cine__mark {
-  position: absolute;
-  top: calc(1.1rem + env(safe-area-inset-top));
-  right: var(--pad-x);
-  z-index: 3;
-  margin: 0;
-  font-family: var(--font-mono), monospace;
-  font-size: clamp(0.75rem, 2.4vw, 1rem);
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: #fff;
-  mix-blend-mode: difference;
-  pointer-events: none;
+.spatial--return .scene__headline {
+  font-size: clamp(1.85rem, 7.5vw, 4.5rem);
 }
 
 /* PHASE 3 (legacy fallback path): blur-in for the static photo treatment */
-.hero-cine__stage .scene__media {
+.spatial__stage .scene__media {
   animation: fade-up-blur 0.8s var(--ease-reveal) forwards;
 }
 
@@ -666,19 +654,6 @@ body {
 
 .story-video-poster {
   display: none;
-}
-
-/* ─── S07 — POVRATAK ─────────────────────────────────────────────── */
-/* Rhymes with S01: same gradient, same label, same low-left copy.   */
-/* Opening asks. Return answers. Smaller type — more words, resolved. */
-/* PHASE 3: Return image also gets dissolve with blur for continuity */
-
-.scene--return .scene__media {
-  animation: fade-up-blur 0.8s var(--ease-reveal) forwards;
-}
-
-.scene--return .scene__headline {
-  font-size: clamp(1.85rem, 7.5vw, 4.5rem);
 }
 
 /* ─── S08 — AKCIJA ───────────────────────────────────────────────── */

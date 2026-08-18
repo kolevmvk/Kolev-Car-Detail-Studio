@@ -44,3 +44,22 @@ export const video = {
   foamWashVertical: "/video/foam-wash-vertical-1080p.mp4",
   interiorProcess:  "/video/interior-detailing-1080p.mp4",
 } as const;
+
+/**
+ * Segmented layers for the WebGL spatial scenes (hero, return). Derived
+ * locally from the golf-road-hills / golf-seaside protagonist photos via
+ * u2net background removal — same Pexels source, same license, just split
+ * into a car cutout (foreground, real depth/parallax) and a horizon-only
+ * background plate (no ground/road, the reflective floor stands in for it).
+ * See assets/SOURCES.md.
+ */
+export const spatial = {
+  hero: {
+    car: "/spatial/hero-car.webp",
+    bg: "/spatial/hero-bg.webp",
+  },
+  return: {
+    car: "/spatial/return-car.webp",
+    bg: "/spatial/return-bg.webp",
+  },
+} as const;

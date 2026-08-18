@@ -17,7 +17,7 @@ Read:
 - `docs/DESIGN-SYSTEM.md`
 - `docs/MOTION.md` only if implementing interaction/animation
 
-Then use `skills/kolev-creative-director/SKILL.md` before implementation.
+Then use `skills/kolev-creative-director/SKILL.md` before implementation. If the scene needs real 3D depth (not a photo with effects layered on it), also read `skills/kolev-spatial-webgl/SKILL.md` before writing any R3F/WebGL code.
 
 ### Booking / availability / jobs / admin
 Read:

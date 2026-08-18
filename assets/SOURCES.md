@@ -38,11 +38,22 @@ All media in this directory is fetched from Pexels items marked **Free to use** 
 | `video/foam-wash-vertical-1080p.mp4` | vertical foam application / wash | Matheus Bertelli | https://www.pexels.com/video/car-washing-foam-application-in-action-32010541/ |
 | `cinematic-story/video/interior-detailing-1080p.mp4` | close-up brush/glove interior detailing | Pavel Danilyuk | https://www.pexels.com/video/a-person-detailing-the-interior-of-the-car-6158073/ |
 
-## HDRI environment (WebGL hero lighting)
+## HDRI environment (WebGL spatial scenes lighting)
 
 | File | Subject | Source | License |
 |---|---|---|---|
-| `hdri/aerodynamics_workshop_1k.hdr` | automotive workshop environment lighting, used for real-time PBR reflections on the WebGL hero | https://polyhaven.com/a/aerodynamics_workshop | CC0 (Poly Haven) — public domain, no attribution required |
+| `hdri/aerodynamics_workshop_1k.hdr` | automotive workshop environment lighting, used for real-time PBR reflections on the WebGL hero/return scenes | https://polyhaven.com/a/aerodynamics_workshop | CC0 (Poly Haven) — public domain, no attribution required |
+
+## Spatial WebGL layers (derived from cinematic story pack, local processing)
+
+`public/spatial/*.webp` are **not new photography** — each is a locally-derived crop/layer of `golf-road-hills.jpg` (hero) and `golf-seaside.jpg` (return) above, same Soran Ali / Pexels source and license. Produced with a one-off local script (`rembg` u2net background segmentation + alpha-matting edge refinement, `Pillow` crop/blur) to split each photo into a foreground car cutout and a horizon-only background plate for the WebGL scene's real depth layers — no new licensing terms apply, no third-party model/service redistributes the output.
+
+| File | Derived from | Role |
+|---|---|---|
+| `spatial/hero-car.webp` | `golf-road-hills.jpg` | foreground car cutout, alpha-matted |
+| `spatial/hero-bg.webp` | `golf-road-hills.jpg` | horizon-only background plate (blurred, no ground) |
+| `spatial/return-car.webp` | `golf-seaside.jpg` | foreground car cutout, alpha-matted |
+| `spatial/return-bg.webp` | `golf-seaside.jpg` | horizon-only background plate (blurred, no ground) |
 
 ## Project use guidance
 
