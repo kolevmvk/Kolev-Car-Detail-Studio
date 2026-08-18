@@ -355,6 +355,139 @@ body {
   padding: 0 var(--pad-x);
 }
 
+/* ─── S00 — IZBOR — interactive 3D centerpiece + real service picker ── */
+
+.orbit-hero {
+  position: relative;
+  min-height: 100dvh;
+  min-height: 100svh;
+  background: var(--color-surface-0);
+  overflow: hidden;
+}
+
+.orbit-hero__stage {
+  position: absolute;
+  inset: 0;
+}
+
+.orbit-hero__stage canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  touch-action: none;
+}
+
+.orbit-hero__fallback {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 90% at 50% 30%, #1a1714 0%, var(--color-surface-0) 70%);
+}
+
+.orbit-hero__overlay {
+  position: relative;
+  z-index: 2;
+  min-height: 100dvh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  padding: calc(5.5rem + env(safe-area-inset-top)) var(--pad-x) calc(2.5rem + env(safe-area-inset-bottom));
+  pointer-events: none;
+}
+
+.orbit-hero__title {
+  margin: 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2.4rem, 8vw, 4.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  max-width: 14ch;
+}
+
+.orbit-hero__hint {
+  margin: 0.75rem 0 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+}
+
+.orbit-hero__empty {
+  margin-top: auto;
+  color: var(--color-text-muted);
+}
+
+.orbit-hero__swatches {
+  margin-top: auto;
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 1.5rem 0 0;
+  pointer-events: auto;
+  scrollbar-width: none;
+}
+
+.orbit-hero__swatches::-webkit-scrollbar { display: none; }
+
+.orbit-hero__swatch {
+  flex: none;
+  padding: 0.65rem 1rem;
+  background: rgb(20 18 16 / 0.7);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--color-line-subtle);
+  color: var(--color-text-muted);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.85rem;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+
+.orbit-hero__swatch:hover {
+  color: var(--color-text-primary-dark);
+  border-color: var(--color-text-muted);
+}
+
+.orbit-hero__swatch[data-active="true"] {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background: rgb(196 145 58 / 0.1);
+}
+
+.orbit-hero__detail {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-line-subtle);
+  pointer-events: auto;
+  background: linear-gradient(transparent, rgb(13 13 13 / 0.85) 60%);
+  padding-bottom: 0.5rem;
+}
+
+.orbit-hero__desc {
+  margin: 0 0 0.5rem;
+  max-width: 34ch;
+  color: var(--color-text-primary-dark);
+}
+
+.orbit-hero__meta {
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.orbit-hero__detail .action__btn {
+  margin-top: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .orbit-hero__swatches { flex-wrap: wrap; overflow-x: visible; }
+  .orbit-hero__detail { max-width: 30rem; }
+  .orbit-hero__detail .action__btn { align-self: flex-start; }
+}
+
 /* ─── Spatial WebGL scenes (S01 hero, S07 return) ───────────────────── */
 
 /* Tall scroll track — its length is the scrub distance GSAP reads progress from */

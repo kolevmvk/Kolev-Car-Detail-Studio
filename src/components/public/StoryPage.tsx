@@ -1,5 +1,7 @@
+import type { ServicePublic } from "@/features/booking/schema";
 import { media, spatial, video } from "@/features/story/content";
 import { HeadlightHold } from "./HeadlightHold";
+import { ServiceOrbitHero } from "./hero/ServiceOrbitHero";
 import { MagneticCta } from "./MagneticCta";
 import { Parallax } from "./Parallax";
 import { Reveal } from "./Reveal";
@@ -15,28 +17,15 @@ import { TimeScene } from "./TimeFrame";
  * Stock media — not a Kolev customer job. Each slot in content.ts accepts
  * authentic studio media without structural changes.
  */
-export function StoryPage() {
+export function StoryPage({ services }: { services: ServicePublic[] }) {
   return (
     <article className="story">
       <h1 className="sr-only">
         Auto detajling u Negotinu — od prvog dana do povratka utiska
       </h1>
 
-      {/* ── S01 NEKAD ── Opening / Memory — spatial WebGL scene ─────────────── */}
-      <SpatialScene
-        id="s1"
-        className="spatial--hero"
-        bgSrc={spatial.hero.bg}
-        carSrc={spatial.hero.car}
-        mirrorText="Kolev"
-        yawRange={[-0.6, 0.12]}
-        fogColor="#0d0d0d"
-        fallbackSrc={media.openingHero}
-        fallbackAlt="Sivi Golf na putu kroz brda — auto kad je još bio centar pažnje."
-        fallbackCropClass="crop-golf-opening"
-        label="Studio · Negotin"
-        headline="Sećaš se?"
-      />
+      {/* ── S00 IZBOR ── Opening — interactive 3D centerpiece + real service picker ── */}
+      <ServiceOrbitHero services={services} />
 
       {/* ── S02 VREME ── Time passing ──────────────────────────────────────── */}
       <TimeScene />
