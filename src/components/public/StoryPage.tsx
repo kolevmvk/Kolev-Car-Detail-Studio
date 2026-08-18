@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { media, video } from "@/features/story/content";
+import { CameraFrame } from "./CameraFrame";
 import { HeadlightHold } from "./HeadlightHold";
+import { HeroCinematic } from "./hero/HeroCinematic";
 import { StoryImage } from "./StoryImage";
 import { StoryVideo } from "./StoryVideo";
 import { TimeScene } from "./TimeFrame";
@@ -19,24 +21,8 @@ export function StoryPage() {
         Auto detajling u Negotinu — od prvog dana do povratka utiska
       </h1>
 
-      {/* ── S01 NEKAD ── Opening / Memory ─────────────────────────────────── */}
-      <section className="scene scene--memory" aria-labelledby="s1">
-        <div className="scene__media">
-          <StoryImage
-            src={media.openingHero}
-            alt="Sivi Golf na putu kroz brda — auto kad je još bio centar pažnje."
-            priority
-            className="story-img crop-golf-opening"
-          />
-          <span className="grain" aria-hidden="true" />
-        </div>
-        <div className="scene__copy scene__copy--low">
-          <p className="scene__label">Studio · Negotin</p>
-          <p id="s1" className="scene__headline">
-            Sećaš se?
-          </p>
-        </div>
-      </section>
+      {/* ── S01 NEKAD ── Opening / Memory — interactive WebGL scene ────────── */}
+      <HeroCinematic />
 
       {/* ── S02 VREME ── Time passing ──────────────────────────────────────── */}
       <TimeScene />
@@ -91,6 +77,20 @@ export function StoryPage() {
             <span className="grain" aria-hidden="true" />
           </div>
           <p className="cut__label" aria-hidden="true">farovi</p>
+        </div>
+
+        {/* Cut A2: polished paint reflection — light and the KOLEV mark meet the surface */}
+        <div className="cut cut--reflection">
+          <div className="cut__media">
+            <StoryImage
+              src={media.craftReflection}
+              alt="Sjaj laka posle poliranja — refleksija koja pokazuje dubinu, ne samo čistoću."
+              className="story-img"
+            />
+            <span className="reflect-sweep" aria-hidden="true" />
+            <span className="grain" aria-hidden="true" />
+          </div>
+          <p className="cut__mark" aria-hidden="true">Kolev</p>
         </div>
 
         {/* Dark interstitial — the silence before the machine starts */}
@@ -156,14 +156,14 @@ export function StoryPage() {
       {/* Same Golf, same gradient, same label, same low-left text. */}
       {/* Opening = memory. Return = regained attention. */}
       <section className="scene scene--return" aria-labelledby="s7">
-        <div className="scene__media">
+        <CameraFrame>
           <StoryImage
             src={media.returnCar}
             alt="Isti Golf kraj mora — sjaj koji se vratio zajedno sa pažnjom."
             className="story-img crop-golf-return"
           />
           <span className="grain" aria-hidden="true" />
-        </div>
+        </CameraFrame>
         <div className="scene__copy scene__copy--low">
           <p className="scene__label">Studio · Negotin</p>
           <p id="s7" className="scene__headline">

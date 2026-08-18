@@ -38,7 +38,7 @@ export function HeadlightHold() {
         <span className="hold-reveal__frame">
           <StoryImage
             src={media.compareBefore}
-            alt="Ekstraktor na tkanini sedišta — rad u toku."
+            alt="Duboka ekstrakcija sedišta — naslage godina izlaze iz tkanja."
             className="story-img"
           />
           <motion.span
@@ -65,7 +65,7 @@ export function HeadlightHold() {
           <span className="hold-static__media">
             <StoryImage
               src={media.compareBefore}
-              alt="Ekstrakcija tkanine — rad koji je bio potreban."
+              alt="Duboka ekstrakcija sedišta — rad koji je bio potreban."
               className="story-img"
             />
           </span>

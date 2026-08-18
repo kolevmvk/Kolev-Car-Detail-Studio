@@ -38,6 +38,12 @@ All media in this directory is fetched from Pexels items marked **Free to use** 
 | `video/foam-wash-vertical-1080p.mp4` | vertical foam application / wash | Matheus Bertelli | https://www.pexels.com/video/car-washing-foam-application-in-action-32010541/ |
 | `cinematic-story/video/interior-detailing-1080p.mp4` | close-up brush/glove interior detailing | Pavel Danilyuk | https://www.pexels.com/video/a-person-detailing-the-interior-of-the-car-6158073/ |
 
+## HDRI environment (WebGL hero lighting)
+
+| File | Subject | Source | License |
+|---|---|---|---|
+| `hdri/aerodynamics_workshop_1k.hdr` | automotive workshop environment lighting, used for real-time PBR reflections on the WebGL hero | https://polyhaven.com/a/aerodynamics_workshop | CC0 (Poly Haven) — public domain, no attribution required |
+
 ## Project use guidance
 
 These are **source assets**, not final art direction. Prefer them as real photographic/video building blocks. The website should crop, grade, sequence and layer them according to `docs/VISUAL-DIRECTION.md`, `docs/STORY.md`, `docs/DESIGN-SYSTEM.md` and `docs/MOTION.md` rather than displaying them as a generic gallery.

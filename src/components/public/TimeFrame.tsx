@@ -1,9 +1,10 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { media } from "@/features/story/content";
 import { StoryImage } from "./StoryImage";
+import { useMountedReducedMotion } from "./useMountedReducedMotion";
 
 /**
  * SCENE 02 — VREME (Time).
@@ -26,7 +27,7 @@ import { StoryImage } from "./StoryImage";
  */
 export function TimeScene() {
   const ref = useRef<HTMLElement>(null);
-  const reduce = useReducedMotion();
+  const reduce = useMountedReducedMotion();
 
   const { scrollYProgress } = useScroll({
     target: ref,

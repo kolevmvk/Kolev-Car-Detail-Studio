@@ -1,44 +1,42 @@
 /**
  * Story content — asset paths mapped to cinematic slots.
  *
- * Premium free images from Unsplash, optimized for automotive storytelling.
+ * Local Pexels-licensed media, story-mapped per assets/cinematic-story/ASSET-MAP.md.
+ * Same grey Golf Mk7 (Soran Ali / Pexels) recurs as the visual protagonist.
  * Each property is a SLOT — replace with authentic studio media without
- * changing component code. Images are served at quality=72 and responsive sizes.
+ * changing component code.
  */
 
 export const media = {
   // ── SCENE 01 — NEKAD (Memory) ──────────────────────────────────────
-  // Dark grey car in natural light — establishing shot of presence
-  openingHero: "https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=1920&q=72&auto=format",
+  // Protagonist Golf on open road — presence, before decline.
+  openingHero: "/story/golf-road-hills.jpg",
 
   // ── SCENE 02 — VREME (Time — scroll-dissolve) ───────────────────────
-  // Same car, but showing time passing and neglect accumulation
-  timeExterior: "https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=1920&q=72&auto=format",
-  timeInterior:  "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1920&q=72&auto=format",
+  // Same road frame dissolves into the same car, parked, ordinary.
+  timeExterior: "/story/golf-road-hills.jpg",
+  timeInterior: "/story/golf-parking.jpg",
 
   // ── SCENE 03 — PREPOZNAVANJE (Recognition — text only, no slot) ─────
   // No image: visual rest beat between time-passing and entry.
 
   // ── SCENE 04 — ULAZ (Entry into studio) ─────────────────────────────
-  // Professional automotive workshop setting
-  entryProcess: "https://images.unsplash.com/photo-1487754180144-351b8ec685cd?w=1920&q=72&auto=format",
+  entryProcess: "/story/polishing-garage.jpg",
 
   // ── SCENE 05 — ZANAT (Craft — cinematic cuts) ───────────────────────
-  // Close detail work: headlight, macro, polishing evidence, interior
-  craftHeadlightAged:   "https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?w=1920&q=72&auto=format",
-  craftHeadlight:       "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=72&auto=format",
-  craftVideoPoster:     "https://images.unsplash.com/photo-1487754180144-351b8ec685cd?w=1920&q=72&auto=format",
-  craftSeat:            "https://images.unsplash.com/photo-1570129477492-45a003537e1f?w=1920&q=72&auto=format",
-  craftInteriorPoster:  "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=1920&q=72&auto=format",
+  craftHeadlightAged:   "/story/headlight-aged.jpg",
+  craftReflection:      "/story/polishing-reflection.jpg",
+  craftVideoPoster:     "/story/polishing-door.jpg",
+  craftSeat:            "/story/seat-deep-clean.jpg",
+  craftInteriorPoster:  "/story/interior-hand-clean.jpg",
 
   // ── SCENE 06 — TRANSFORMACIJA (Hold-to-reveal) ──────────────────────
-  // Interior before/after transformation — dirty vs. pristine
-  compareBefore: "https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=1920&q=72&auto=format",
-  compareAfter:  "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=1920&q=72&auto=format",
+  // Real process/result pair — interior extraction before, clean result after.
+  compareBefore: "/story/deep-extraction.jpg",
+  compareAfter:  "/story/clean-interior.jpg",
 
   // ── SCENE 07 — POVRATAK (Return — rhymes with opening) ─────────────
-  // Same visual confidence as opening — restored state
-  returnCar: "https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=1920&q=72&auto=format",
+  returnCar: "/story/golf-seaside.jpg",
 } as const;
 
 export const video = {

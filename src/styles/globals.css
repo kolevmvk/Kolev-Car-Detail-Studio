@@ -192,6 +192,17 @@ body {
   inset: 0;
 }
 
+/* Graded top edge — reads as a cut into the next shot, not a DOM seam */
+.scene__media::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 10dvh;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(var(--color-surface-0), transparent);
+}
+
 .scene__copy {
   position: relative;
   z-index: 2;
@@ -210,15 +221,72 @@ body {
   padding: 0 var(--pad-x);
 }
 
-/* ─── S01 — NEKAD ────────────────────────────────────────────────── */
+/* ─── S01 — NEKAD — interactive WebGL scene ─────────────────────────── */
+
+/* Tall scroll track — its length is the scrub distance GSAP reads progress from */
+.hero-cine {
+  position: relative;
+  min-height: 260dvh;
+  background: var(--color-surface-0);
+}
+
+/* Pinned viewport-height stage — canvas, fallback photo, overlay all live here */
+.hero-cine__stage {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--color-surface-0);
+}
+
+.hero-cine__canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-cine__canvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.hero-cine__grain {
+  z-index: 1;
+}
+
+.hero-cine__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  transition: opacity 0.15s linear;
+}
 
 /* Opening word is film-poster scale */
-.scene--memory .scene__headline {
+.hero-cine__headline {
   font-size: clamp(3.5rem, 14vw, 8rem);
 }
 
-/* PHASE 3: Opening image dissolve with subtle blur intermediate state */
-.scene--memory .scene__media {
+/* KOLEV catches the lit surface behind it — brand embedded in the light itself */
+.hero-cine__mark {
+  position: absolute;
+  top: calc(1.1rem + env(safe-area-inset-top));
+  right: var(--pad-x);
+  z-index: 3;
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: clamp(0.75rem, 2.4vw, 1rem);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #fff;
+  mix-blend-mode: difference;
+  pointer-events: none;
+}
+
+/* PHASE 3 (legacy fallback path): blur-in for the static photo treatment */
+.hero-cine__stage .scene__media {
   animation: fade-up-blur 0.8s var(--ease-reveal) forwards;
 }
 
@@ -457,12 +525,53 @@ body {
 }
 
 /* Cut proportions — varying height creates editing rhythm */
-.cut--macro    { min-height: 100dvh; }    /* headlight: full viewport, slow read */
-.cut--pause    { min-height: 12dvh; }     /* black silence between macro and machine */
-.cut--video    { min-height: 96dvh; }     /* polishing video: nearly full */
-.cut--interior { min-height: 80dvh; }     /* seat fabric: shorter, hard cut feel */
-.cut--close    { min-height: 64dvh; }     /* interior video: intimate, smaller */
-.cut--copy     { min-height: 0; padding: 3.5rem var(--pad-x) 4.5rem; }
+.cut--macro      { min-height: 100dvh; }    /* headlight: full viewport, slow read */
+.cut--reflection { min-height: 88dvh; }     /* polished paint: light + mark */
+.cut--pause      { min-height: 12dvh; }     /* black silence between macro and machine */
+.cut--video      { min-height: 96dvh; }     /* polishing video: nearly full */
+.cut--interior   { min-height: 80dvh; }     /* seat fabric: shorter, hard cut feel */
+.cut--close      { min-height: 64dvh; }     /* interior video: intimate, smaller */
+.cut--copy       { min-height: 0; padding: 3.5rem var(--pad-x) 4.5rem; }
+
+/* Reflection cut: light sweep across polished paint, once, on scroll-in */
+.reflect-sweep {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgb(237 232 224 / 0.22) 48%,
+    rgb(237 232 224 / 0.4) 51%,
+    rgb(237 232 224 / 0.22) 54%,
+    transparent 65%
+  );
+  background-size: 260% 100%;
+  background-position: 120% 0;
+  animation: sweep-once 1.4s var(--ease-reveal) forwards;
+  animation-timeline: view();
+  animation-range: entry 10% cover 55%;
+}
+
+@keyframes sweep-once {
+  0%   { background-position: 120% 0; }
+  100% { background-position: -20% 0; }
+}
+
+/* KOLEV wordmark, embedded directly in the reflection — brand meets light */
+.cut__mark {
+  position: absolute;
+  bottom: 1.75rem;
+  right: var(--pad-x);
+  z-index: 3;
+  margin: 0;
+  font-family: var(--font-mono), monospace;
+  font-size: clamp(0.9rem, 3vw, 1.4rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #fff;
+  mix-blend-mode: difference;
+}
 
 /* ─── S06 — TRANSFORMACIJA ──────────────────────────────────────── */
 
