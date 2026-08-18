@@ -229,11 +229,36 @@ body {
 
 .grain {
   position: absolute;
-  inset: 0;
+  inset: -4%;
   pointer-events: none;
   opacity: 0.18;
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+  /* Always-on subtle drift — the frame keeps a pulse even at rest, not
+     only while scrolling. Transform-only, cheap, GPU-composited. */
+  animation: grain-drift 9s steps(8) infinite;
+}
+
+@keyframes grain-drift {
+  0%, 100% { transform: translate(0, 0); }
+  12% { transform: translate(-1.5%, -1%); }
+  29% { transform: translate(1%, 1.5%); }
+  46% { transform: translate(-1%, 0.5%); }
+  63% { transform: translate(1.5%, -1.5%); }
+  81% { transform: translate(-0.5%, 1%); }
+}
+
+/* Photography breathes slightly on desktop hover — a live surface, not a
+   flat photo pasted into a frame. */
+@media (hover: hover) and (pointer: fine) {
+  .story-img {
+    transition: transform 0.7s var(--ease-reveal);
+  }
+
+  .cut:hover .story-img,
+  .scene--entry:hover .story-img {
+    transform: scale(1.045);
+  }
 }
 
 /* ─── Typography ─────────────────────────────────────────────────── */

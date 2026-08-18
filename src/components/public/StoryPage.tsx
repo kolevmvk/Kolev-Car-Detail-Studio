@@ -1,6 +1,7 @@
 import { media, spatial, video } from "@/features/story/content";
 import { HeadlightHold } from "./HeadlightHold";
 import { MagneticCta } from "./MagneticCta";
+import { Parallax } from "./Parallax";
 import { Reveal } from "./Reveal";
 import { SpatialScene } from "./spatial/SpatialScene";
 import { StoryImage } from "./StoryImage";
@@ -63,11 +64,13 @@ export function StoryPage() {
       {/* ── S04 ULAZ ── Entry into studio ──────────────────────────────────── */}
       <section className="scene scene--entry" aria-labelledby="s4">
         <div className="scene__media">
-          <StoryImage
-            src={media.entryProcess}
-            alt="Pena na faru — hemija pre ručnog rada, prelaz u studio."
-            className="story-img crop-entry-foam"
-          />
+          <Parallax strength={11}>
+            <StoryImage
+              src={media.entryProcess}
+              alt="Pena na faru — hemija pre ručnog rada, prelaz u studio."
+              className="story-img crop-entry-foam"
+            />
+          </Parallax>
           <span className="grain" aria-hidden="true" />
         </div>
         <div className="scene__copy scene__copy--low">
@@ -88,11 +91,13 @@ export function StoryPage() {
         {/* Cut A: aged headlight macro — the detail that tells the whole story */}
         <div className="cut cut--macro">
           <div className="cut__media">
-            <StoryImage
-              src={media.craftHeadlightAged}
-              alt="Izbledelost — far zamagljen godinama, bez udesa."
-              className="story-img crop-headlight"
-            />
+            <Parallax strength={9}>
+              <StoryImage
+                src={media.craftHeadlightAged}
+                alt="Izbledelost — far zamagljen godinama, bez udesa."
+                className="story-img crop-headlight"
+              />
+            </Parallax>
             <span className="grain" aria-hidden="true" />
           </div>
           <p className="cut__label" aria-hidden="true">farovi</p>
@@ -101,11 +106,13 @@ export function StoryPage() {
         {/* Cut A2: polished paint reflection — light and the KOLEV mark meet the surface */}
         <div className="cut cut--reflection">
           <div className="cut__media">
-            <StoryImage
-              src={media.craftReflection}
-              alt="Sjaj laka posle poliranja — refleksija koja pokazuje dubinu, ne samo čistoću."
-              className="story-img"
-            />
+            <Parallax strength={8}>
+              <StoryImage
+                src={media.craftReflection}
+                alt="Sjaj laka posle poliranja — refleksija koja pokazuje dubinu, ne samo čistoću."
+                className="story-img"
+              />
+            </Parallax>
             <span className="reflect-sweep" aria-hidden="true" />
             <span className="grain" aria-hidden="true" />
           </div>
@@ -130,11 +137,13 @@ export function StoryPage() {
         {/* Cut C: seat extraction — hard cut into interior fabric */}
         <div className="cut cut--interior">
           <div className="cut__media">
-            <StoryImage
-              src={media.craftSeat}
-              alt="Mokra ekstrakcija tkanja sedišta — godišnji slojevi idu jedan po jedan."
-              className="story-img crop-seat"
-            />
+            <Parallax strength={9}>
+              <StoryImage
+                src={media.craftSeat}
+                alt="Mokra ekstrakcija tkanja sedišta — godišnji slojevi idu jedan po jedan."
+                className="story-img crop-seat"
+              />
+            </Parallax>
             <span className="grain" aria-hidden="true" />
           </div>
           <p className="cut__label" aria-hidden="true">enterijer</p>
