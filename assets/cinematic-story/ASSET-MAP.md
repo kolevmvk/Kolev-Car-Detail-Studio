@@ -20,6 +20,18 @@ Do **not** claim that these are before/after photographs of the same detailing j
 - `seat-deep-clean.jpg` — close, tactile interior extraction. Pexels photo 5233285, Khunkorn Laowisit.
 - `interior-hand-clean.jpg` — human/manual interior care. Pexels photo 6873185, Tima Miroshnichenko.
 
+## Fictional life-story inserts
+
+These documented Pexels images support the explicitly labelled **autorska priča — nije stvarni slučaj** scroll sequence. They are memory fragments, not evidence of one real owner or vehicle:
+
+- `public/story/car-key-handover.jpg` — first key / first owner.
+- `public/story/businessman-car-work.jpg` — business-use years.
+- `public/story/night-couple-drive.jpg` — restrained private night memory.
+- `public/story/child-back-seat.jpg` — family-trip detail.
+- `public/story/moving-car-boxes.jpg` — moving day.
+
+The recurring grey Golf still anchors the opening, second-owner road chapter and return. Do not relabel these inserts as documentary coverage of that Golf.
+
 ## Process video
 
 - `interior-detailing-1080p.mp4` — close-up brush/glove interior detailing. Pexels video 6158073, Pavel Danilyuk.

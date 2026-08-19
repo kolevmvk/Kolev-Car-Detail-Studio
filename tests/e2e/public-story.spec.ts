@@ -1,33 +1,53 @@
 import { expect, test } from "@playwright/test";
 
-test("homepage tells the NEKAD·SADA·PONOVO story without template chrome", async ({
+test("homepage tells one car's life story without template chrome", async ({
   page,
 }) => {
   await page.goto("/");
 
-  // SR heading identifies the page
+  // S01 — Memory
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    "Auto detajling u Negotinu"
+    "Sećaš se kako je izgledao",
   );
 
-  // S01 — Memory
-  await expect(page.getByText("Sećaš se?")).toBeVisible();
+  // S02 — Years in the life of one car
+  await expect(
+    page.getByText("Držala ga je malo duže nego što je morala."),
+  ).toBeVisible();
 
-  // S02 — Time
-  await expect(page.getByText("Nije se promenio")).toBeVisible();
-  await expect(page.getByText("Samo si prestao da primećuješ.")).toBeVisible();
+  // S03 — Recognition under inspection light
+  await expect(page.locator(".inspection__headline")).toContainText(
+    "Nije starost.",
+  );
 
-  // S03 — Recognition (film pause)
-  await expect(page.getByText("Nije ostario.")).toBeVisible();
+  // S07 — Return keeps the owner and the same car in frame.
+  await expect(page.locator(".age-removal__headline")).toContainText(
+    "Skidamo godine",
+  );
 
-  // S07 — Return
-  await expect(page.getByText("Ne vraćamo vreme.")).toBeVisible();
-
-  // S08 — Emotional proposition + single CTA (appears only at story's end)
-  await expect(page.getByText("Možda mu ne treba")).toBeVisible();
+  // One persistent booking instrument replaces duplicate scene CTAs.
+  await expect(page.getByText("Možda ti ne treba")).toBeVisible();
+  await expect(page.locator(".site-chrome__cta")).toBeVisible();
   await expect(
     page.getByRole("link", { name: "Pogledaj prvi slobodan termin" })
   ).toHaveCount(1);
+  await expect(page.getByRole("button", { name: "Otvori mreže" })).toBeVisible();
+  await expect(page.locator(".social-orb__item")).toHaveCount(6);
+  await expect(page.locator(".craft-reel")).toBeVisible();
+  await expect(page.getByRole("tab", { name: /ulaz/ })).toBeVisible();
+  await expect(page.locator("#cenovnik-title")).toBeAttached();
+  await expect(page.locator("#cenovnik .price-scene__list li").first()).toBeAttached();
+  await expect(page.locator(".price-scene .social-dock--board")).toHaveCount(0);
+
+  // Practical layer is reachable without replaying the story.
+  await page.getByRole("button", { name: "Meni" }).click();
+  await expect(page.getByRole("dialog", { name: "Praktična navigacija" })).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /Cenovnik i usluge/ }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /Slobodni termini/ }),
+  ).toBeVisible();
 
   // Anti-template assertions
   await expect(page.getByText("testimonial", { exact: false })).toHaveCount(0);
@@ -50,8 +70,12 @@ test("reduced motion exposes comparison frames statically", async ({ page }) => 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
 
-  await expect(page.getByText("Rad", { exact: true })).toBeVisible();
-  await expect(page.getByText("Rezultat", { exact: true })).toBeVisible();
+  await expect(
+    page.locator(".hold-static").getByText("Stanje", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.locator(".hold-static").getByText("Rezultat", { exact: true }),
+  ).toBeVisible();
   await expect(
     page.getByRole("button", { name: /Pritisni i drži/ })
   ).toHaveCount(0);

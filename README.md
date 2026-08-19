@@ -8,6 +8,8 @@ Public cinematic story and Studio OS for Kolev Car Detailing, Negotin.
 pnpm install
 cp .env.example .env.local
 # set NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY and SUPABASE_SERVICE_ROLE_KEY
+# optional verified profiles: NEXT_PUBLIC_INSTAGRAM_URL, NEXT_PUBLIC_FACEBOOK_URL,
+# NEXT_PUBLIC_TIKTOK_URL
 pnpm dev
 ```
 

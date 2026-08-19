@@ -1,27 +1,27 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { media } from "@/features/story/content";
 import { StoryImage } from "./StoryImage";
 
 /**
- * Press-and-hold comparison: before state → after state via clip-path reveal.
- * 
- * PHASE 3 UPGRADE:
- * - Subtle 3D perspective on clip-path reveal (rotateX, rotateY)
- * - Material texture shift: glossiness increases as reveal progresses
- * - Haptic feedback on mobile (vibration pattern)
- * - Reduced-motion: shows both images side-by-side as static figures
+ * Press-and-hold editorial visualization using a generated, matched camera
+ * position. It demonstrates the interaction without claiming a customer case.
  */
 export function HeadlightHold() {
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const [revealing, setRevealing] = useState(false);
 
-  const handlePointerDown = () => {
+  const handlePointerDown = (event: React.PointerEvent<HTMLButtonElement>) => {
+    event.currentTarget.setPointerCapture(event.pointerId);
+    setRevealing(true);
     if (typeof navigator !== "undefined" && navigator.vibrate) {
       navigator.vibrate([10, 20, 10]);
     }
   };
+
+  const stopReveal = () => setRevealing(false);
 
   return (
     <div className="hold-root">
@@ -30,31 +30,56 @@ export function HeadlightHold() {
         type="button"
         className="hold-reveal"
         aria-describedby="hold-hint"
-        aria-label="Pritisni i drži da vidiš rezultat"
+        aria-label="Pritisni i drži da vidiš rezultat restauracije fara"
         onPointerDown={handlePointerDown}
+        onPointerUp={stopReveal}
+        onPointerCancel={stopReveal}
+        onKeyDown={(event) => {
+          if (event.key === " " || event.key === "Enter") setRevealing(true);
+        }}
+        onKeyUp={(event) => {
+          if (event.key === " " || event.key === "Enter") stopReveal();
+        }}
+        data-revealing={revealing}
       >
         <span className="hold-reveal__frame">
           <StoryImage
             src={media.compareBefore}
-            alt="Duboka ekstrakcija sedišta — naslage godina izlaze iz tkanja."
+            alt="Zamućen far pre restauracije."
             className="story-img"
+            loading="eager"
+            unoptimized
           />
+          <span className="hold-reveal__state hold-reveal__state--before" aria-hidden="true">
+            Stanje
+          </span>
           <motion.span
             className="hold-reveal__after"
             aria-hidden="true"
             initial={{ clipPath: "inset(0 100% 0 0)" }}
-            whileHover={{ clipPath: "inset(0 0 0 0)" }}
-            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            animate={{
+              clipPath: revealing ? "inset(0 0% 0 0)" : "inset(0 100% 0 0)",
+            }}
+            transition={{
+              duration: revealing ? 0.72 : 0.46,
+              ease: [0.22, 1, 0.36, 1],
+            }}
           >
             <StoryImage
               src={media.compareAfter}
               alt=""
               className="story-img"
+              loading="eager"
+              unoptimized
             />
+            <span className="hold-reveal__state hold-reveal__state--after">
+              Rezultat
+            </span>
           </motion.span>
+          <span className="hold-reveal__edge" aria-hidden="true" />
         </span>
         <span id="hold-hint" className="hold-reveal__hint">
-          Pritisni i drži
+          {revealing ? "Pusti · vrati stanje" : "Drži · vidi rezultat"}
         </span>
       </button>
 
@@ -63,17 +88,17 @@ export function HeadlightHold() {
           <span className="hold-static__media">
             <StoryImage
               src={media.compareBefore}
-              alt="Duboka ekstrakcija sedišta — rad koji je bio potreban."
+              alt="Zamućen far pre restauracije."
               className="story-img"
             />
           </span>
-          <figcaption>Rad</figcaption>
+          <figcaption>Stanje</figcaption>
         </figure>
         <figure className="hold-static__shot">
           <span className="hold-static__media">
             <StoryImage
               src={media.compareAfter}
-              alt="Čist enterijer posle rada — jasna tekstura, bez naslaga."
+              alt="Far posle restauracije."
               className="story-img"
             />
           </span>

@@ -10,33 +10,48 @@
 export const media = {
   // ── SCENE 01 — NEKAD (Memory) ──────────────────────────────────────
   // Protagonist Golf on open road — presence, before decline.
-  openingHero: "/story/golf-road-hills.jpg",
+  openingHero: "/story/kolev-hero-coast.webp",
 
   // ── SCENE 02 — VREME (Time — scroll-dissolve) ───────────────────────
   // Same road frame dissolves into the same car, parked, ordinary.
   timeExterior: "/story/golf-road-hills.jpg",
   timeInterior: "/story/golf-parking.jpg",
 
-  // ── SCENE 03 — PREPOZNAVANJE (Recognition — text only, no slot) ─────
-  // No image: visual rest beat between time-passing and entry.
+  // ── SCENE 03 — PREPOZNAVANJE (Recognition under inspection light) ────
+  inspectionHeadlight: "/story/headlight-inspection.webp",
 
   // ── SCENE 04 — ULAZ (Entry into studio) ─────────────────────────────
-  entryProcess: "/story/polishing-garage.jpg",
+  entryProcess: "/story/headlight-foam.jpg",
 
   // ── SCENE 05 — ZANAT (Craft — cinematic cuts) ───────────────────────
   craftHeadlightAged:   "/story/headlight-aged.jpg",
   craftReflection:      "/story/polishing-reflection.jpg",
   craftVideoPoster:     "/story/polishing-door.jpg",
   craftSeat:            "/story/seat-deep-clean.jpg",
-  craftInteriorPoster:  "/story/interior-hand-clean.jpg",
+  craftInteriorPoster:  "/story/studio-detailer.webp",
 
-  // ── SCENE 06 — TRANSFORMACIJA (Hold-to-reveal) ──────────────────────
-  // Real process/result pair — interior extraction before, clean result after.
-  compareBefore: "/story/deep-extraction.jpg",
-  compareAfter:  "/story/clean-interior.jpg",
+  // ── SCENE — SKIDAMO GODINE (authored studio sequence, tr-1…tr-6) ──
+  ageRemoval: "/story/tr-1.webp",
+  ageRemovalFrames: [
+    "/story/tr-1.webp",
+    "/story/tr-2.webp",
+    "/story/tr-3.webp",
+    "/story/tr-4.webp",
+    "/story/tr-5.webp",
+    "/story/tr-6.webp",
+  ],
+  priceScene: "/story/tr-x.webp",
+
+  // ── SCENE 06 — STANJE / POSTUPAK (Hold-to-reveal) ───────────────────
+  // Illustrative stock sequence, explicitly not presented as matched before/after proof.
+  compareBefore: "/story/headlight-before.webp",
+  compareAfter:  "/story/headlight-after.webp",
 
   // ── SCENE 07 — POVRATAK (Return — rhymes with opening) ─────────────
-  returnCar: "/story/golf-seaside.jpg",
+  returnCar: "/story/owner-arrival.webp",
+
+  // ── SCENE 08 — BRANDED EPILOGUE (authored campaign visualization) ───
+  campaignFinale: "/story/campaign-finale.webp",
 } as const;
 
 export const video = {

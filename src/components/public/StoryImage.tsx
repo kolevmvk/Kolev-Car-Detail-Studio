@@ -7,6 +7,8 @@ type StoryImageProps = {
   sizes?: string;
   className?: string;
   quality?: number;
+  loading?: "eager" | "lazy";
+  unoptimized?: boolean;
 };
 
 export function StoryImage({
@@ -16,6 +18,8 @@ export function StoryImage({
   sizes = "(max-width: 430px) 100vw, 100vw",
   className,
   quality = 72,
+  loading,
+  unoptimized = false,
 }: StoryImageProps) {
   return (
     <Image
@@ -23,6 +27,8 @@ export function StoryImage({
       alt={alt}
       fill
       priority={priority}
+      loading={loading}
+      unoptimized={unoptimized}
       sizes={sizes}
       quality={quality}
       className={className ?? "story-img"}

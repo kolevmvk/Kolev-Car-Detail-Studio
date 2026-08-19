@@ -1,6 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const isCI = Boolean(process.env.CI);
+const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:3000";
 
 export default defineConfig({
   testDir: "tests/e2e",
@@ -9,12 +10,12 @@ export default defineConfig({
   retries: isCI ? 1 : 0,
   reporter: isCI ? "github" : "list",
   use: {
-    baseURL: "http://127.0.0.1:3000",
+    baseURL,
     trace: "on-first-retry",
   },
   webServer: {
     command: isCI ? "pnpm start" : "pnpm dev",
-    url: "http://127.0.0.1:3000",
+    url: baseURL,
     reuseExistingServer: !isCI,
     timeout: 120_000,
   },

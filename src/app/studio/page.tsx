@@ -1,5 +1,6 @@
 import { requireAdmin } from "@/lib/auth/studio";
 import Link from "next/link";
+import type { Route } from "next";
 
 export const metadata = { title: "Pregled" };
 export const dynamic = "force-dynamic";
@@ -78,6 +79,24 @@ export default async function StudioDashboard() {
         <Link href="/studio/bookings" className="studio-action-card">
           <span className="studio-action-card__title">Rezervacije</span>
           <span className="studio-action-card__desc">Pregled i upravljanje zahtevima</span>
+        </Link>
+        <Link href={"/studio/services" as Route} className="studio-action-card">
+          <span className="studio-action-card__title">Usluge i cene</span>
+          <span className="studio-action-card__desc">
+            Promeni cenu, trajanje i vidljivost
+          </span>
+        </Link>
+        <Link href={"/studio/links" as Route} className="studio-action-card">
+          <span className="studio-action-card__title">Telefon i mreže</span>
+          <span className="studio-action-card__desc">
+            Javni broj, Instagram, Facebook, TikTok, WhatsApp, Viber, Telegram
+          </span>
+        </Link>
+        <Link href={"/studio/promotions" as Route} className="studio-action-card">
+          <span className="studio-action-card__title">Akcije</span>
+          <span className="studio-action-card__desc">
+            Kreiraj unapred dizajniran promo segment
+          </span>
         </Link>
       </div>
     </div>

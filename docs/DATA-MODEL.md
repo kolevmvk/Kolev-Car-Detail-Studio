@@ -49,6 +49,51 @@ Fields:
 
 Initial services include headlight restoration, deep interior cleaning, and combined/full-refresh offers. Names and prices are admin-editable.
 
+### Promotion
+Owner-managed public action rendered through a predefined Kolev design template.
+
+Fields:
+- id
+- internal_name
+- placement: homepage_story_end
+- template: spotlight | signal | service_focus
+- eyebrow
+- headline
+- body optional
+- cta_label
+- cta_href (same-origin path only)
+- service_id optional
+- enabled
+- starts_at optional
+- ends_at optional
+- sort_order
+- created_by
+- created_at
+- updated_at
+
+Promotions never accept arbitrary HTML or CSS. When linked to a service, the
+public price is read from the Service record rather than copied into promotional
+content. This entity is for the studio's own offers and is not a generic sponsor
+banner placement.
+
+### StudioPublicProfile
+Singleton owner-managed public destinations for telephone, Instagram, Facebook,
+TikTok, WhatsApp, Viber and Telegram.
+
+Fields:
+- phone optional
+- instagram_url optional
+- facebook_url optional
+- tiktok_url optional
+- whatsapp_url optional
+- viber_url optional
+- telegram_url optional
+- updated_at
+- updated_by
+
+Empty fields stay unpublished. The public UI may show a waiting icon, but must
+never invent a telephone number or profile URL.
+
 ### Vehicle
 Represents a customer's vehicle and may appear across bookings/jobs/cases.
 
@@ -310,7 +355,7 @@ Do not store unnecessary personal data in analytics.
 ## Suggested relational grouping
 
 Identity: users
-Operations: customers, vehicles, services, availability_windows, availability_blocks, bookings, jobs, job_services
+Operations: customers, vehicles, services, promotions, availability_windows, availability_blocks, bookings, jobs, job_services
 Media: media_assets, media_derivatives, job_media
 Editorial: case_studies, distribution_items
 Partners: sponsors, sponsor_campaigns, sponsor_placements, products, job_products

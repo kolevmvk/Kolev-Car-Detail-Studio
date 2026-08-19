@@ -1,13 +1,18 @@
+import { media } from "@/features/story/content";
 import type { ServicePublic } from "@/features/booking/schema";
-import { media, spatial, video } from "@/features/story/content";
+import { AgeRemovalScene } from "./AgeRemovalScene";
+import { CraftReel } from "./CraftReel";
+import { DetailingWordmark } from "./DetailingWordmark";
 import { HeadlightHold } from "./HeadlightHold";
-import { ServiceOrbitHero } from "./hero/ServiceOrbitHero";
-import { MagneticCta } from "./MagneticCta";
-import { Parallax } from "./Parallax";
+import { InspectionScene } from "./InspectionScene";
+import { OpeningHero } from "./OpeningHero";
+import {
+  PromotionBanner,
+  type PublicPromotion,
+} from "./PromotionBanner";
 import { Reveal } from "./Reveal";
-import { SpatialScene } from "./spatial/SpatialScene";
+import { ServiceLedger } from "./ServiceLedger";
 import { StoryImage } from "./StoryImage";
-import { StoryVideo } from "./StoryVideo";
 import { TimeScene } from "./TimeFrame";
 
 /**
@@ -17,195 +22,58 @@ import { TimeScene } from "./TimeFrame";
  * Stock media — not a Kolev customer job. Each slot in content.ts accepts
  * authentic studio media without structural changes.
  */
-export function StoryPage({ services }: { services: ServicePublic[] }) {
+export function StoryPage({
+  promotion,
+  services,
+}: {
+  promotion?: PublicPromotion | null;
+  services: ServicePublic[];
+}) {
   return (
     <article className="story">
-      <h1 className="sr-only">
-        Auto detajling u Negotinu — od prvog dana do povratka utiska
-      </h1>
-
-      {/* ── S00 IZBOR ── Opening — interactive 3D centerpiece + real service picker ── */}
-      <ServiceOrbitHero services={services} />
+      {/* ── S01 SEĆANJE ── The real car opens the story; no simulated vehicle. ── */}
+      <OpeningHero />
 
       {/* ── S02 VREME ── Time passing ──────────────────────────────────────── */}
       <TimeScene />
 
-      {/* ── S03 PREPOZNAVANJE ── Film pause — text sits at bottom of silence ─ */}
-      <section className="scene scene--recognition" aria-labelledby="s3">
-        <div className="scene__copy">
-          <Reveal>
-            <p id="s3" className="scene__headline">
-              Nije ostario.
-              <br />
-              Zapušten je.
-            </p>
-          </Reveal>
-          <Reveal delay={0.12}>
-            <p className="scene__note">
-              Nije mu prošlo vreme.
-              <br />
-              Prošao mu je sjaj.
-            </p>
-          </Reveal>
-        </div>
-      </section>
+      {/* ── S03 PREPOZNAVANJE ── Inspection light exposes accumulated wear. ─ */}
+      <InspectionScene />
 
-      {/* ── S04 ULAZ ── Entry into studio ──────────────────────────────────── */}
-      <section className="scene scene--entry" aria-labelledby="s4">
-        <div className="scene__media">
-          <Parallax strength={11}>
-            <StoryImage
-              src={media.entryProcess}
-              alt="Pena na faru — hemija pre ručnog rada, prelaz u studio."
-              className="story-img crop-entry-foam"
-            />
-          </Parallax>
-          <span className="grain" aria-hidden="true" />
-        </div>
-        <div className="scene__copy scene__copy--low">
-          <Reveal>
-            <p id="s4" className="scene__headline">
-              Auto ulazi.
-              <br />
-              Posao ostaje.
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ── S05 ZANAT ── Craft — edited as film, not media gallery ─────────── */}
-      <section className="scene scene--craft" aria-labelledby="s5-label">
-        <p className="sr-only" id="s5-label">Zanat</p>
-
-        {/* Cut A: aged headlight macro — the detail that tells the whole story */}
-        <div className="cut cut--macro">
-          <div className="cut__media">
-            <Parallax strength={9}>
-              <StoryImage
-                src={media.craftHeadlightAged}
-                alt="Izbledelost — far zamagljen godinama, bez udesa."
-                className="story-img crop-headlight"
-              />
-            </Parallax>
-            <span className="grain" aria-hidden="true" />
-          </div>
-          <p className="cut__label" aria-hidden="true">farovi</p>
-        </div>
-
-        {/* Cut A2: polished paint reflection — light and the KOLEV mark meet the surface */}
-        <div className="cut cut--reflection">
-          <div className="cut__media">
-            <Parallax strength={8}>
-              <StoryImage
-                src={media.craftReflection}
-                alt="Sjaj laka posle poliranja — refleksija koja pokazuje dubinu, ne samo čistoću."
-                className="story-img"
-              />
-            </Parallax>
-            <span className="reflect-sweep" aria-hidden="true" />
-            <span className="grain" aria-hidden="true" />
-          </div>
-          <p className="cut__mark" aria-hidden="true">Kolev</p>
-        </div>
-
-        {/* Dark interstitial — the silence before the machine starts */}
-        <div className="cut cut--pause" aria-hidden="true" />
-
-        {/* Cut B: polishing machine — movement and correction */}
-        <div className="cut cut--video">
-          <div className="cut__media">
-            <StoryVideo
-              src={video.polishProcess}
-              poster={media.craftVideoPoster}
-              alt="Rotaciona korekcija laka — bliski kadar bez rezova."
-              className="story-video"
-            />
-          </div>
-        </div>
-
-        {/* Cut C: seat extraction — hard cut into interior fabric */}
-        <div className="cut cut--interior">
-          <div className="cut__media">
-            <Parallax strength={9}>
-              <StoryImage
-                src={media.craftSeat}
-                alt="Mokra ekstrakcija tkanja sedišta — godišnji slojevi idu jedan po jedan."
-                className="story-img crop-seat"
-              />
-            </Parallax>
-            <span className="grain" aria-hidden="true" />
-          </div>
-          <p className="cut__label" aria-hidden="true">enterijer</p>
-        </div>
-
-        {/* Cut D: interior detail video — close human care */}
-        <div className="cut cut--close">
-          <div className="cut__media">
-            <StoryVideo
-              src={video.interiorProcess}
-              poster={media.craftInteriorPoster}
-              alt="Ručni rad na unutrašnjosti — četkica, krpa, detalj."
-              className="story-video"
-            />
-          </div>
-        </div>
-
-        {/* Craft statement — no image */}
-        <div className="cut cut--copy">
-          <Reveal>
-            <p className="scene__headline">
-              Skidamo godine
-              <br />
-              sa izgleda.
-            </p>
-          </Reveal>
-          <Reveal delay={0.12}>
-            <p className="scene__note">Ne sa papira.</p>
-          </Reveal>
-        </div>
-      </section>
+      {/* ── S04–S05 ZANAT ── Three process cuts in one timed/swipe reel. ─ */}
+      <CraftReel />
 
       {/* ── S06 TRANSFORMACIJA ── Hold-to-reveal ───────────────────────────── */}
       <section className="scene scene--transformation" aria-labelledby="s6">
         <div className="scene__copy scene__copy--pad">
-          <p id="s6" className="scene__label">Rad · Rezultat</p>
+          <p id="s6" className="scene__label">
+            Farovi
+          </p>
         </div>
         <HeadlightHold />
       </section>
 
-      {/* ── S07 POVRATAK ── Return — echoes S01, same spatial engine ───────── */}
-      {/* Opening = memory. Return = regained attention. Same car, same */}
-      {/* studio light, warmer fog — the scene itself has changed, not just the photo. */}
-      <SpatialScene
-        id="s7"
-        className="spatial--return"
-        bgSrc={spatial.return.bg}
-        carSrc={spatial.return.car}
-        mirrorText="Kolev"
-        yawRange={[-0.15, 0.55]}
-        fogColor="#1a1410"
-        fallbackSrc={media.returnCar}
-        fallbackAlt="Isti Golf kraj mora — sjaj koji se vratio zajedno sa pažnjom."
-        fallbackCropClass="crop-golf-return"
-        label="Studio · Negotin"
-        headline={
-          <>
-            Ne vraćamo vreme.
-            <br />
-            Vraćamo ono što je
-            <br />
-            vreme sakrilo.
-          </>
-        }
-      />
+      {/* ── S07 POVRATAK ── Vlasnica ponovo vidi isti automobil. ───────────── */}
+      <AgeRemovalScene />
+
+      {promotion && <PromotionBanner promotion={promotion} />}
 
       {/* ── S08 AKCIJA ── Emotional continuation → booking ────────────────── */}
-      <section className="scene scene--action" aria-labelledby="s8">
+      <section id="booking-entry" className="scene scene--action" aria-labelledby="s8">
+        <div className="action__media">
+          <StoryImage
+            src={media.campaignFinale}
+            alt="Kolev Car Detail Studio u poslednjem svetlu dana."
+            className="story-img action__image"
+          />
+          <span className="action__grade" aria-hidden="true" />
+        </div>
+        <DetailingWordmark />
         <div className="scene__copy">
           <p className="scene__label">Kolev Car Detailing</p>
           <Reveal>
             <p id="s8" className="scene__headline scene__headline--sm">
-              Možda mu ne treba
+              Možda ti ne treba
               <br />
               drugi auto.
               <br />
@@ -214,14 +82,13 @@ export function StoryPage({ services }: { services: ServicePublic[] }) {
               drugi utisak.
             </p>
           </Reveal>
-          <MagneticCta className="action__btn" href="/booking">
-            Pogledaj prvi slobodan termin
-          </MagneticCta>
           <p className="scene__meta">
             Negotin · Srbija · Termini su realni
           </p>
         </div>
       </section>
+
+      <ServiceLedger services={services} />
     </article>
   );
 }

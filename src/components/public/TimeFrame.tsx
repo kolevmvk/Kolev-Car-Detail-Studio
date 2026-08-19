@@ -1,124 +1,181 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
-import { media } from "@/features/story/content";
+import { useMotionValueEvent, useScroll } from "framer-motion";
+import { useRef, useState } from "react";
 import { StoryImage } from "./StoryImage";
 import { useMountedReducedMotion } from "./useMountedReducedMotion";
 
-/**
- * SCENE 02 — VREME (Time).
- *
- * The same grey Golf dissolves from road/memory into parking lot/routine.
- * The car never changes — only its context does, communicating the slow
- * accumulation of ordinary time.
- *
- * PHASE 3 UPGRADE:
- * - Added subtle 3D perspective (rotateY) on the dissolve layer
- * - Creates depth perception — the car appears to turn inward as time passes
- * - Blur intermediate state enhances the "memory → present" transition
- *
- * Year markers appear one at a time in a single position (bottom-right),
- * like a documentary timestamp. They are atmosphere, not a timeline widget.
- *
- * Desktop: sticky pinned scene for 250vh of scrolling with Framer dissolve.
- * Mobile: two sequential 100/72dvh beats — no dissolve, no markers.
- * Reduced motion: static parking frame, no year markers.
- */
+const lifeChapters = [
+  {
+    year: "2014",
+    owner: "Prvi ključ",
+    title: "Držala ga je malo duže nego što je morala.",
+    copy: "Prvi pogled preko ramena. Prvi trag dlana na volanu. Auto je mirisao na planove.",
+    src: "/story/owner-arrival.webp",
+    alt: "Vlasnica kraj sivog Golfa u poslednjem svetlu dana.",
+    crop: "life-frame__image--first",
+    layout: "acquisition",
+  },
+  {
+    year: "2016",
+    owner: "Poslovne godine",
+    title: "Radni dan je često završavao na parkingu.",
+    copy: "Sastanci, fascikle, kafa između dva grada. Kilometri su postali rutina.",
+    src: "/story/owner-business-drive.webp",
+    alt: "Vlasnica vozi Golf nakon poslovnog dana.",
+    crop: "life-frame__image--business",
+    layout: "business",
+  },
+  {
+    year: "2018",
+    owner: "Posle ponoći",
+    title: "Jedne noći stakla su dugo ostala zamagljena.",
+    copy: "Neke uspomene ne ostavljaju fotografiju. Samo tišinu u parkiranom autu.",
+    src: "/story/night-couple.webp",
+    alt: "Par kraj Golfa na obali posle ponoći.",
+    crop: "life-frame__image--night",
+    layout: "nocturne",
+  },
+  {
+    year: "2022",
+    owner: "Prvo porodično more",
+    title: "Pozadi dvoje dece. Svuda pesak.",
+    copy: "Mrvice u šavovima, so na patosnicama i pitanje: „Jesmo li stigli?”",
+    src: "/story/family-road-trip.webp",
+    alt: "Porodica pakuje isti Golf za putovanje.",
+    crop: "life-frame__image--sea",
+    layout: "family",
+  },
+  {
+    year: "2024",
+    owner: "Selidba",
+    title: "Kutije do krova. Vrata koja se ne zatvaraju iz prve.",
+    copy: "Jedan stan je stao u nekoliko vožnji. Tragovi su ostali u gepeku i tkanini.",
+    src: "/story/moving-day.webp",
+    alt: "Vlasnica prenosi kutiju kraj Golfa tokom selidbe.",
+    crop: "life-frame__image--move",
+    layout: "moving",
+  },
+] as const;
+
 export function TimeScene() {
   const ref = useRef<HTMLElement>(null);
   const reduce = useMountedReducedMotion();
+  const [active, setActive] = useState(0);
 
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end end"],
   });
 
-  // Parking (later state) dissolves over the road (memory) as scroll progresses
-  const interiorOpacity = useTransform(scrollYProgress, [0.12, 0.58], [0, 1]);
-  
-  // 3D depth: subtle rotation on Y axis during dissolve (memory → present)
-  const interiorRotation = useTransform(scrollYProgress, [0.12, 0.35, 0.58], [-8, 0, 0]);
+  useMotionValueEvent(scrollYProgress, "change", (progress) => {
+    const next = Math.min(
+      lifeChapters.length - 1,
+      Math.floor(progress * lifeChapters.length),
+    );
+    setActive(next);
+  });
 
-  // Year markers: one at a time, same position, like a documentary counter
-  const y0op = useTransform(scrollYProgress, [0.0, 0.07, 0.2, 0.28], [0, 0.9, 0.9, 0]);
-  const y1op = useTransform(scrollYProgress, [0.24, 0.31, 0.44, 0.52], [0, 0.9, 0.9, 0]);
-  const y2op = useTransform(scrollYProgress, [0.48, 0.55, 0.68, 0.76], [0, 0.9, 0.9, 0]);
-  const y3op = useTransform(scrollYProgress, [0.72, 0.8, 1.0, 1.0], [0, 0.9, 0.9, 0.9]);
-  const yearOps = [y0op, y1op, y2op, y3op];
+  function jumpToChapter(index: number) {
+    const section = ref.current;
+    if (!section) return;
+    const start = window.scrollY + section.getBoundingClientRect().top;
+    const distance = section.offsetHeight - window.innerHeight;
+    const progress = (index + 0.18) / lifeChapters.length;
+    window.scrollTo({
+      top: start + distance * progress,
+      behavior: "smooth",
+    });
+  }
 
-  // Copy fades in near end of dissolve
-  const copyOp = useTransform(scrollYProgress, [0.68, 0.82], [0, 1]);
-  const copyShift = useTransform(scrollYProgress, [0.68, 0.82], [20, 0]);
+  if (reduce) {
+    return (
+      <section className="life-static" aria-labelledby="s-time">
+        <div className="life-static__intro">
+          <p className="scene__label">Kolev · vreme</p>
+          <h2 id="s-time" className="scene__headline">Jedan auto. Mnogo života.</h2>
+        </div>
+        {lifeChapters.map((chapter) => (
+          <article className="life-static__chapter" key={chapter.year}>
+            <div className="life-static__media">
+              <StoryImage src={chapter.src} alt={chapter.alt} className={`story-img ${chapter.crop}`} />
+            </div>
+            <p className="life-frame__meta">{chapter.year} · {chapter.owner}</p>
+            <h3 className="life-frame__title">{chapter.title}</h3>
+            <p className="life-frame__copy">{chapter.copy}</p>
+          </article>
+        ))}
+      </section>
+    );
+  }
 
   return (
-    <section ref={ref} className="scene scene--time" aria-labelledby="s-time">
-      <div className="time__sticky">
-        <div className="time__media">
-          {/* Road / memory — the car when it still had presence */}
-          <StoryImage
-            src={media.timeExterior}
-            alt="Sivi Golf na putu kroz brda — kakav je bio dok si ga još gledao."
-            className="story-img crop-golf-time"
-          />
-
-          {/* Parking / routine — same car, time has passed */}
-          <motion.div
-            className="time__interior"
-            style={{
-              opacity: reduce ? 1 : interiorOpacity,
-              rotateY: reduce ? 0 : interiorRotation,
-              perspective: 1200,
-            }}
-          >
-            <StoryImage
-              src={media.timeInterior}
-              alt="Isti Golf parkiran — svakodnevica koja postepeno skriva sjaj."
-              className="story-img crop-golf-time"
-            />
-          </motion.div>
-
-          <span className="grain" aria-hidden="true" />
-
-          {/* Documentary year counter — hidden on mobile */}
-          {!reduce && ["2015", "2018", "2021", "2026"].map((year, i) => (
-            <motion.span
-              key={year}
-              className="time__year"
-              style={{ opacity: yearOps[i] }}
-              aria-hidden="true"
+    <section
+      ref={ref}
+      className="life-scroll"
+      aria-labelledby="s-time"
+      style={{ "--life-count": lifeChapters.length } as React.CSSProperties}
+    >
+      <div className="life-scroll__sticky" data-layout={lifeChapters[active].layout}>
+        <div className="life-scroll__frames">
+          {lifeChapters.map((chapter, index) => (
+            <figure
+              className="life-frame"
+              data-active={index === active}
+              aria-hidden={index !== active}
+              key={`${chapter.year}-${chapter.owner}`}
             >
-              {year}
-            </motion.span>
+              <StoryImage
+                src={chapter.src}
+                alt={index === active ? chapter.alt : ""}
+                className={`story-img ${chapter.crop}`}
+                priority={index === 0}
+                unoptimized={chapter.layout === "nocturne"}
+                loading={
+                  index === 0
+                    ? undefined
+                    : Math.abs(index - active) <= 1
+                      ? "eager"
+                      : "lazy"
+                }
+              />
+              <span className="life-frame__grade" aria-hidden="true" />
+            </figure>
           ))}
+          <span className="grain" aria-hidden="true" />
         </div>
 
-        <motion.div
-          className="time__copy"
-          style={{
-            opacity: reduce ? 1 : copyOp,
-            y: reduce ? 0 : copyShift,
-          }}
-        >
-          <p id="s-time" className="scene__headline">
-            Nije se promenio
-            <br />
-            odjednom.
+        <span className="life-scroll__trace" aria-hidden="true" key={`trace-${active}`} />
+
+        <div className="life-scroll__copy" aria-live="polite" key={active}>
+          <p className="life-frame__meta">
+            {lifeChapters[active].year} · {lifeChapters[active].owner}
           </p>
-          <p className="scene__note">Samo si prestao da primećuješ.</p>
-        </motion.div>
-      </div>
-
-      {/* Mobile: second sequential beat — same car, later moment */}
-      <div className="time__mobile-beat" aria-hidden="true">
-        <div className="time__media">
-          <StoryImage
-            src={media.timeInterior}
-            alt=""
-            className="story-img crop-golf-time"
-          />
-          <span className="grain" />
+          <h2 id="s-time" className="life-frame__title">
+            {lifeChapters[active].title}
+          </h2>
+          <p className="life-frame__copy">{lifeChapters[active].copy}</p>
         </div>
+
+        <nav className="life-scroll__progress" aria-label="Godine u životu automobila">
+          <span>{String(active + 1).padStart(2, "0")}</span>
+          <div className="life-scroll__ticks">
+            {lifeChapters.map((chapter, index) => (
+              <button
+                type="button"
+                key={chapter.year}
+                data-active={index <= active}
+                aria-current={index === active ? "step" : undefined}
+                aria-label={`${chapter.year}: ${chapter.owner}`}
+                onClick={() => jumpToChapter(index)}
+              >
+                <i />
+                <small>{chapter.year.slice(2)}</small>
+              </button>
+            ))}
+          </div>
+          <span>{String(lifeChapters.length).padStart(2, "0")}</span>
+        </nav>
       </div>
     </section>
   );

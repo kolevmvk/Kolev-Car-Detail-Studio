@@ -156,6 +156,19 @@ export type WaitlistEntryRow = {
   created_at: string;
 };
 
+export type StudioPublicProfileRow = {
+  id: boolean;
+  phone: string | null;
+  instagram_url: string | null;
+  facebook_url: string | null;
+  tiktok_url: string | null;
+  whatsapp_url: string | null;
+  viber_url: string | null;
+  telegram_url: string | null;
+  updated_at: string;
+  updated_by: string | null;
+};
+
 // ─── Database schema ─────────────────────────────────────────────────────────
 
 export interface Database {
@@ -431,6 +444,33 @@ export interface Database {
           phone?: string;
           note?: string | null;
           notified_at?: string | null;
+        };
+        Relationships: [];
+      };
+      studio_public_profile: {
+        Row: StudioPublicProfileRow;
+        Insert: {
+          id?: boolean;
+          phone?: string | null;
+          instagram_url?: string | null;
+          facebook_url?: string | null;
+          tiktok_url?: string | null;
+          whatsapp_url?: string | null;
+          viber_url?: string | null;
+          telegram_url?: string | null;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          phone?: string | null;
+          instagram_url?: string | null;
+          facebook_url?: string | null;
+          tiktok_url?: string | null;
+          whatsapp_url?: string | null;
+          viber_url?: string | null;
+          telegram_url?: string | null;
+          updated_at?: string;
+          updated_by?: string | null;
         };
         Relationships: [];
       };
