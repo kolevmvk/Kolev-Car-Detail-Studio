@@ -23,3 +23,7 @@ pnpm build
 ```
 
 See `AGENTS.md` and `docs/` before changing product behavior.
+
+Live site: `https://kolev-car-detail-studio.vercel.app`
+
+What is still required for Studio, bookings and real contact data is listed in `docs/INFRASTRUCTURE-LIVE.md`.
